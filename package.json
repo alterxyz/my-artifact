@@ -1,0 +1,16 @@
+{
+  "name": "my-artifact",
+  "description": "A single static home for independent HTML artifacts.",
+  "license": "(AGPL-3.0-or-later OR LicenseRef-Commercial)",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "bun run build && wrangler dev",
+    "check": "bun run build && wrangler deploy --dry-run",
+    "deploy": "bun run build && wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "4.153.0"
+  }
+}

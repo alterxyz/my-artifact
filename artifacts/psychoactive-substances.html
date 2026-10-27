@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>新国家精神活性物质分级草案</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F2F4F1; --surface:#FFFFFF; --ink:#1D2928; --muted:#5A6764; --rule:#D3DAD6;
+  --heat:#A8455C; --sys:#3F6E8C; --rail:#1D2928;
+  --t1:#CFE6D8; --t2:#A9D3BE; --t3:#E9D8A6; --t4:#E7B87E; --t5:#E3A07A; --t6:#C8674F; --t7:#9B5C8C; --t8:#6E1E3A;
+  --tt-light:#1D2928; --tt-dark:#FFFFFF;
+  --serif:"Noto Serif SC","Songti SC","STSong","SimSun",serif;
+  --sans:"PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#151B1B; --surface:#1C2424; --ink:#E3E9E6; --muted:#9AA8A4; --rule:#2D3838;
+    --heat:#E0809A; --sys:#86B4D3; --rail:#C9D3CF; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#151B1B; --surface:#1C2424; --ink:#E3E9E6; --muted:#9AA8A4; --rule:#2D3838;
+  --heat:#E0809A; --sys:#86B4D3; --rail:#C9D3CF; color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.75}
+.wrap{max-width:46rem;margin:0 auto;padding:2.75rem 1.25rem 4rem}
+h1,h2{font-family:var(--serif);font-weight:900;line-height:1.2;margin:0}
+h1{font-size:clamp(2rem,7.5vw,3.25rem);letter-spacing:.02em}
+h2{font-size:clamp(1.4rem,4.5vw,1.85rem);margin:3.25rem 0 1rem}
+p{margin:.6rem 0}
+.premise{color:var(--muted);max-width:36em;margin-top:1rem}
+a{color:var(--sys)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--sys);outline-offset:2px}
+
+/* ladder */
+.ladder{margin:2.25rem 0 0;border-left:4px solid var(--rail);border-right:4px solid var(--rail);border-top:4px solid var(--rail)}
+.rung{display:grid;grid-template-columns:4.25rem 1fr;gap:.75rem;padding:.9rem 1rem;border-bottom:4px solid var(--rail);background:var(--surface);background:color-mix(in srgb,var(--tc) 22%,var(--surface))}
+.rung .num{font-family:var(--serif);font-weight:900;font-size:2.1rem;line-height:1;color:var(--ink)}
+.rung .tname{font-weight:700;font-size:1.02rem}
+.rung .tdesc{color:var(--muted);font-size:.88rem;line-height:1.5}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.55rem}
+.chip{background:var(--surface);border:1px solid var(--rule);border-radius:999px;padding:.22rem .75rem;font-size:.9rem;cursor:pointer;line-height:1.5}
+.chip:hover{border-color:var(--ink)}
+.chip sup{font-weight:700;margin-left:1px}
+.empty{color:var(--muted);font-size:.88rem}
+.ladder-note{color:var(--muted);font-size:.88rem;margin-top:.6rem}
+
+/* articles */
+.articles{list-style:none;padding:0;margin:0;counter-reset:art}
+.articles li{counter-increment:art;padding:.85rem 0;border-top:1px solid var(--rule);display:grid;grid-template-columns:5rem 1fr;gap:.75rem}
+.articles li::before{content:"第" counter(art,simp-chinese-informal) "条";font-family:var(--serif);font-weight:700;color:var(--muted)}
+.articles strong{display:block}
+.articles span{color:var(--muted);font-size:.93rem}
+
+/* filters + cards */
+.legend{color:var(--muted);font-size:.88rem}
+.filters{display:flex;flex-wrap:wrap;gap:.4rem;margin:1rem 0 1.1rem}
+.filters button{background:transparent;border:1px solid var(--rule);border-radius:6px;padding:.3rem .8rem;cursor:pointer;font-size:.92rem}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+details.sub{background:var(--surface);border:1px solid var(--rule);border-left:6px solid var(--tc);margin-bottom:.6rem;border-radius:2px}
+details.sub[hidden]{display:none}
+summary{list-style:none;display:flex;align-items:center;gap:.75rem;padding:.8rem 1rem;cursor:pointer}
+summary::-webkit-details-marker{display:none}
+summary .name{font-weight:700;flex:1;min-width:0}
+summary .cat{color:var(--muted);font-size:.85rem;white-space:nowrap}
+.badge{background:var(--tc);color:var(--tt);font-weight:700;font-size:.85rem;padding:.08rem .55rem;border-radius:4px;white-space:nowrap}
+summary .caret{transition:transform .2s;color:var(--muted)}
+details[open] summary .caret{transform:rotate(90deg)}
+.body{padding:0 1rem 1rem}
+.group{margin-top:.6rem}
+.group h3{font-size:.85rem;font-weight:600;color:var(--muted);margin:.5rem 0 .25rem}
+.dim{display:grid;grid-template-columns:5.5rem 1fr 2.6rem;align-items:center;gap:.6rem;font-size:.9rem;line-height:1.6}
+.bar{display:flex;gap:3px}
+.seg{flex:1;height:8px;background:var(--rule);border-radius:1px}
+.seg.on{background:var(--heat)}
+.sysg .seg.on{background:var(--sys)}
+.dim .w{color:var(--muted);font-size:.85rem;text-align:right}
+.why{margin-top:.8rem}
+.now{color:var(--muted);font-size:.92rem;border-top:1px dashed var(--rule);padding-top:.5rem;margin-top:.6rem}
+.flash{animation:flash 1.2s ease-out}
+@keyframes flash{0%{box-shadow:0 0 0 4px var(--sys)}100%{box-shadow:0 0 0 0 transparent}}
+
+/* report */
+.report{background:var(--surface);border:1px solid var(--rule);border-top:4px solid var(--rail);padding:.35rem 1.1rem 1rem}
+.report h3{font-family:var(--serif);font-weight:700;font-size:1.05rem;margin:1.1rem 0 .3rem}
+.report ul{padding-left:1.1rem;margin:.4rem 0}
+.report li{margin:.35rem 0}
+.rmeta{color:var(--muted);font-size:.9rem}
+
+/* changes / open questions */
+.list{padding:0;margin:0;list-style:none}
+.list li{padding:.7rem 0;border-top:1px solid var(--rule)}
+.list b{margin-right:.35rem}
+.sources{font-size:.9rem;color:var(--muted);padding-left:1.1rem}
+.sources li{margin:.3rem 0}
+.foot{margin-top:3rem;color:var(--muted);font-size:.85rem;border-top:4px solid var(--rail);padding-top:1rem}
+
+@media (max-width:480px){
+  .rung{grid-template-columns:3.2rem 1fr;padding:.8rem .75rem}
+  .rung .num{font-size:1.75rem}
+  .articles li{grid-template-columns:1fr;gap:.15rem}
+  .dim{grid-template-columns:5rem 1fr 2.4rem}
+  summary .cat{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>一个新国家的精神活性物质分级草案</h1>
+  <p class="premise">假设一个刚成立的国家，没有历史包袱，也不考虑税收和产业。每种物质只按它本身的性质，放到八级阶梯的某一级上。越往上，获取越难。点任意一个名字，可以看到它的完整评估。</p>
+
+  <div class="ladder" id="ladder" aria-label="八级管理阶梯"></div>
+  <p class="ladder-note">带 + 号的条目在本级内执行更严的附加限制。</p>
+
+  <h2>立法原则</h2>
+  <ol class="articles">
+    <li><div><strong>强迫使用是核心维度。</strong><span>戒断和耐受单独都不足以构成管制理由。咖啡因两者都有，却没有人主张管制它。</span></div></li>
+    <li><div><strong>滥用管制和获取把关是两条独立的轴。</strong><span>前者管成瘾，后者管安全。DORA 几乎不成瘾但需要用药提示；一代抗组胺不成瘾却更危险。</span></div></li>
+    <li><div><strong>按剂型、浓度和途径分级，而不是按分子。</strong><span>Vyvanse 和速释安非他命、咖啡饮料和纯咖啡因粉、燃烧烟草和尼古丁，都是同一个分子不同的风险。</span></div></li>
+    <li><div><strong>习惯性依靠不是监管对象。</strong><span>“不吃褪黑素睡不着”和“睡前不上厕所睡不着”属于同一类，本身不构成问题。</span></div></li>
+    <li><div><strong>可执行性是物质本身的属性。</strong><span>越容易自制，禁止越无效，只会把产品推向更危险的黑市。酒和大麻不被禁止，原因在这里，而不在文化。</span></div></li>
+    <li><div><strong>急性心理风险单独成为一个维度。</strong><span>它和成瘾无关，对应的工具是“有人陪同的受监督使用”，而不是处方或禁止。</span></div></li>
+    <li><div><strong>管制本身有代价。</strong><span>治疗用药的门槛每抬高一点，就有人因此得不到治疗。丁丙诺啡和 ADHD 用药的门槛应尽量低。</span></div></li>
+    <li><div><strong>处方分为常规和严格两级。</strong><span>需要诊断的药都要处方，但只有强迫使用高、戒断可能致命，或者在伤害他人上有不可替代的特殊优势（比如无色无味、起效极快、很快检测不到）的，才进入严格处方。同一类药可以因为剂型落在不同级别。</span></div></li>
+    <li><div><strong>禁止只用于极少数情形。</strong><span>同时满足：风险极高、没有存量使用者、存在更安全的替代品。目前只有可燃烟草和散装纯咖啡因符合。</span></div></li>
+    <li><div><strong>所有分级定期复审。</strong><span>每一级都附带证据日期，新证据出现时重新评估，而不是等它变成历史惯例。</span></div></li>
+  </ol>
+
+  <h2>物质档案</h2>
+  <p class="legend">风险项按 0 到 4 评分：无、低、中、高、极高。制度项中，“执行难度”越高，说明越难靠禁止来控制；“管制代价”越高，说明限制本身造成的伤害越大。</p>
+  <div class="filters" id="filters" role="group" aria-label="按类别筛选"></div>
+  <div id="cards"></div>
+
+  <h2>去掉历史以后，哪些位置变了</h2>
+  <ul class="list">
+    <li><b>香烟</b>从普遍可买变成第 8 级。没有存量吸烟者，禁售不会引发戒断潮；燃烧带来的危害，可以由更安全的尼古丁产品替代。</li>
+    <li><b>电子烟</b>从“戒烟工具”变成“尼古丁唯一的合法出口”。理由变了，位置仍在第 3 级；有它存在，香烟禁售才执行得下去。</li>
+    <li><b>酒精</b>仍在第 3 级，但理由换了：不是文化和税收，而是它太容易自酿，禁令会制造甲醇中毒的黑市。</li>
+    <li><b>一代抗组胺和 DORA</b>互换位置。现实中前者随手可买，后者受管制；按安全性应该反过来。</li>
+    <li><b>Vyvanse 和丁丙诺啡</b>进入常规处方，和速释安非他命、苯二氮䓬类分开。前者是因为剂型，后者是因为管制代价。</li>
+  </ul>
+
+  <h2>仍然开放的问题</h2>
+  <ul class="list">
+    <li><b>高效价大麻</b>与精神病之间的关联强度仍有争议；限制效价可能把一部分需求推回黑市。</li>
+    <li><b>可燃烟草禁售</b>牺牲了成年人的选择权，还要面对走私和自种。</li>
+    <li><b>裸盖菇素</b>的现实数据来自没有对照组的观察研究，而且严重不良反应集中在首次使用者身上。</li>
+    <li><b>Vyvanse</b>的前体药设计挡得住改变给药途径，挡不住口服加量。</li>
+    <li><b>Z 药</b>留在常规处方，依据是可替代性推理，而不是实证。目前没有直接证据说明收紧它会不会减少下药；它造成的顺行性遗忘，也可能对加害者有特殊价值。</li>
+    <li><b>酒精和大麻</b>的线具体划在哪里，最终取决于你给个人自主和公共健康分别多少权重。这一点，数据回答不了。</li>
+  </ul>
+
+  <h2>讨论记录：安全住所该不该作为前提</h2>
+  <div class="report">
+    <p class="rmeta">第 4 版撤回了第 3 版中的一条原则，这里记录原因。</p>
+    <h3>问题从哪里来</h3>
+    <p>讨论 Z 药该不该进严格处方时，引出了一个更深的问题：如果“安全的私密住所”被视为基本权利或基础保障，防范下药这类伤害，是不是就该交给基础设施，而不是药品分级？第 3 版直接把它当成前提，写成了一条立法原则。但原本要讨论的是：它该不该成为前提。</p>
+    <h3>结论：不作为前提</h3>
+    <ul>
+      <li><b>它解决不了问题的核心部分。</b>安全的住所防得住外人，防不住同住的人；住所越私密，外界越难发现。另有研究显示，下药案件最常发生在住宿和娱乐场所。</li>
+      <li><b>它会让整个框架变得脆弱。</b>依赖它的每一处放宽都没有退路，住房保障一旦出现缺口，放宽就直接变成风险。更稳妥的是纵深防御：每一层各自负责，不假设别的层一定有效。</li>
+      <li><b>它的影响面太大。</b>药物挪用、儿童误食、家庭暴力中的酒精和大麻、裸盖菇素能否在家使用，都会受它影响。这样的东西不宜放在前提的位置。</li>
+    </ul>
+    <h3>撤回了什么，保留了什么</h3>
+    <ul>
+      <li><b>撤回</b>“防范他人伤害首先靠基础设施”这条原则，因为它把一个未经讨论的前提写进了草案。</li>
+      <li><b>保留</b> Z 药在常规处方。依据是可替代性：酒精和非处方抗组胺都能被用来下药，单独收紧 Z 药防不住这类伤害。这条推理不依赖住房保障。</li>
+      <li><b>保留</b>严格处方的收窄标准：只有在伤害他人上有不可替代优势的物质，才因为这一维升级。</li>
+    </ul>
+    <h3>仍不确定的地方</h3>
+    <p>可替代性是推理，不是实证。目前没有直接证据说明收紧 Z 药会不会减少下药；它造成的顺行性遗忘也可能对加害者有特殊价值。这一点已列入“仍然开放的问题”。</p>
+    <h3>留待决定</h3>
+    <p>基础设施可以写成条件条款，而不是前提。例如：“当安全住所和快速毒理检测的覆盖率达到规定水平，并经评估确认有效时，相关条目可下调一级。”这样放宽是挣来的，而不是假设出来的。是否采纳这条条款，以及安全住所是否属于基本权利，是价值判断，由立国者决定。</p>
+  </div>
+
+  <h2>主要依据</h2>
+  <ul class="sources">
+    <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10006052/" target="_blank" rel="noopener">莱博雷生的滥用潜力八因素分析</a></li>
+    <li><a href="https://www.marktpuls.ch/artikel/permalink/675639" target="_blank" rel="noopener">DEA 提议将 DORA 降为 Schedule V（2026 年 8 月）</a></li>
+    <li><a href="https://eprints.gla.ac.uk/294764" target="_blank" rel="noopener">苏格兰酒精最低单价对死亡和住院的影响</a></li>
+    <li><a href="https://ccsa.ca/impacts-canadas-recreational-cannabis-legalization-youth-cannabis-use-and-medical-cannabis" target="_blank" rel="noopener">加拿大大麻合法化对青少年使用的影响</a></li>
+    <li><a href="https://www.hmpgloballearningnetwork.com/site/pcn/news/oregon-psilocybin-program-shows-mental-health-improvements-few-serious-reactions" target="_blank" rel="noopener">俄勒冈受监督裸盖菇素项目的安全性研究</a></li>
+    <li><a href="https://www.tobaccoinduceddiseases.org/Newest-findings-from-the-Cochrane-living-systematic-review-of-e-cigarettes-for-smoking,206389,0,2.html" target="_blank" rel="noopener">Cochrane 电子烟戒烟系统综述</a></li>
+    <li><a href="https://www.lewissilkin.com/insights/2026/05/07/tobacco-and-vapes-act-2026-becomes-law-102mrjq" target="_blank" rel="noopener">英国《2026 年烟草与电子烟法》</a></li>
+    <li><a href="https://www.rand.org/content/dam/rand/pubs/external_publications/EP70000/EP70800/RAND_EP70800.takeaway.pdf" target="_blank" rel="noopener">取消丁丙诺啡处方许可后的效果（兰德）</a></li>
+  </ul>
+
+  <p class="foot">这是一个思想实验，不是医疗或法律建议。评分是基于截至 2026 年 10 月公开证据的定性判断。</p>
+</div>
+
+<script>
+const TIERS = [
+  {n:1,name:"自由销售",desc:"任何商店，无年龄限制",c:"--t1",dark:false},
+  {n:2,name:"柜台销售",desc:"成人可买，附用药提示",c:"--t2",dark:false},
+  {n:3,name:"持牌零售",desc:"执照店，21 岁起，限价、限效价、零广告",c:"--t3",dark:false},
+  {n:4,name:"药剂师把关",desc:"须药剂师问询后售出",c:"--t4",dark:false},
+  {n:5,name:"常规处方",desc:"首次需诊断，之后可续方、可开多月用量",c:"--t5",dark:false},
+  {n:6,name:"严格处方",desc:"每次重新开具，限量，处方登记",c:"--t6",dark:false},
+  {n:7,name:"受监督使用",desc:"仅在持证场所、有人陪同",c:"--t7",dark:true},
+  {n:8,name:"禁止销售",desc:"不设合法销售渠道",c:"--t8",dark:true}
+];
+const WORD = ["无","低","中","高","极高"];
+const DIMS = [
+  ["self","使用者本人",[["c","强迫使用"],["w","戒断"],["t","耐受"],["o","急性过量"],["ch","慢性伤害"]]],
+  ["soc","他人与心理",[["ot","对他人"],["ap","急性心理"]]],
+  ["sys","制度修正项",[["en","执行难度"],["co","管制代价"]]]
+];
+// r: c w t o ch ot ap en co
+const S = [
+  {id:"melatonin",name:"褪黑素",cat:"助眠",tier:1,r:[0,0,0,0,0,0,0,4,1],
+   why:"无依赖、几乎无过量风险，作用也弱。对它的“离不开”属于习惯性依靠，不是监管对象。",
+   now:"美国作为补充剂销售，英国等地需处方。"},
+  {id:"dora",name:"DORA（莱博雷生、达利雷生等）",cat:"助眠",tier:2,r:[1,0,0,1,0,1,1,1,3],
+   why:"成瘾、戒断、耐受都接近褪黑素，但它是真正的催眠药。附次日驾驶和禁止饮酒的提示后，可以柜台销售。",
+   now:"美国现为 Schedule IV 处方药，DEA 已提议降为 Schedule V。"},
+  {id:"antihist",name:"一代抗组胺（助眠用途）",cat:"助眠",tier:4,r:[1,1,3,3,2,1,2,1,1],
+   why:"镇静耐受几天内出现，过量会抗胆碱能中毒，长期使用与痴呆风险有关联。安全性不如 DORA。用于过敏和晕动病不受影响。",
+   now:"现实中随手可买。"},
+  {id:"z",name:"Z 药（唑吡坦等）",cat:"助眠",tier:5,r:[2,2,2,2,1,2,1,2,2],
+   why:"强迫使用和戒断都在中等水平，和酒精合用危险。它确实出现在下药案件里，但酒精和非处方抗组胺都能替代它，单独收紧防不住这类伤害。所以留在常规处方，同时要求片剂溶于饮料时会显色，并限制单次开药量。",
+   now:"与现实一致。"},
+  {id:"benzo",name:"苯二氮䓬类",cat:"助眠",tier:6,r:[2,4,3,2,2,2,1,2,2],
+   why:"戒断可能引发癫痫，这一条单独就足以进入严格处方。每张处方都附带减停计划。",
+   now:"比现实更严：美国为 Schedule IV，可以续方；减停管理也普遍不足。"},
+  {id:"caffeine",name:"咖啡因（饮料）",cat:"兴奋剂",tier:1,r:[1,1,2,0,1,0,1,4,0],
+   why:"有正式承认的戒断，也有耐受，但强迫使用低，通过饮料几乎不可能过量，也不伤害他人。它证明了戒断加耐受不足以构成管制理由。",
+   now:"与现实一致。"},
+  {id:"caffpowder",name:"咖啡因（散装纯粉）",cat:"兴奋剂",tier:8,r:[1,1,2,4,1,0,1,1,0],
+   why:"同一个分子，一小勺就可能致命，又没有正当的消费需要。定剂量的片剂可以放在第 2 级。",
+   now:"多国已限制散装纯粉销售。"},
+  {id:"vyvanse",name:"Vyvanse（赖右苯丙胺）",cat:"兴奋剂",tier:5,r:[2,1,2,2,1,1,1,2,3],
+   why:"前体药，起效平缓，鼻吸或注射都不会更快起效。强迫使用和挪用风险都明显低于速释安非他命，所以和它分开：首次仍需诊断，之后按常规处方管理，可续方、可开多月用量。",
+   now:"美国为 Schedule II，与可卡因同级。"},
+  {id:"amph",name:"速释安非他命",cat:"兴奋剂",tier:6,r:[3,1,2,2,1,2,2,2,2],
+   why:"起效快、可以鼻吸，强迫使用明显高于 Vyvanse，所以进入严格处方：每次重新开具，限量。",
+   now:"与现实一致。"},
+  {id:"nrt",name:"尼古丁替代疗法（贴片、口香糖）",cat:"尼古丁",tier:1,r:[1,1,1,1,0,0,0,2,3],
+   why:"尼古丁释放慢，强迫使用低。在没有吸烟者的国家用途变小，但没有理由限制。",
+   now:"多为非处方销售。"},
+  {id:"vape",name:"电子烟",cat:"尼古丁",tier:3,r:[3,2,2,1,1,1,0,3,2],
+   why:"在新国家里，它不再是戒烟工具，而是尼古丁唯一的合法出口；有它存在，香烟禁售才执行得下去。限制尼古丁浓度和口味营销。",
+   now:"各国差异很大。"},
+  {id:"cig",name:"香烟（可燃烟草）",cat:"尼古丁",tier:8,r:[4,2,2,1,4,3,0,2,1],
+   why:"强迫使用和慢性伤害都在顶端，还通过二手烟伤及他人。危害几乎全部来自燃烧，尼古丁另有更安全的出口；没有存量吸烟者，禁售不会造成戒断潮。",
+   now:"现实中普遍合法；英国已立法对 2009 年及以后出生的人永久禁售。"},
+  {id:"beer",name:"低度酒（啤酒、葡萄酒）",cat:"酒精与大麻",tier:3,plus:true,r:[3,4,3,2,4,4,2,4,2],
+   why:"如果酒精是新发现的物质，它的药理画像是全表最差之一。不禁止的唯一理由是它极易自酿，禁令会制造甲醇中毒的黑市。实行专卖店、最低单价、零广告。",
+   now:"现实中多为普通零售。"},
+  {id:"spirits",name:"烈酒",cat:"酒精与大麻",tier:3,plus:true,r:[3,4,3,4,4,4,2,3,2],
+   why:"同一个分子，单位体积的乙醇更多，急性中毒和依赖来得更快。最低单价更高，销售点更少。",
+   now:"现实中多与低度酒同样管理。"},
+  {id:"cannabis",name:"大麻（常规效价）",cat:"酒精与大麻",tier:3,r:[2,1,2,0,2,2,2,4,3],
+   why:"强迫使用中低，几乎不会致死；极易自种，禁止只会推向黑市。21 岁起售，按 THC 含量定价。",
+   now:"各国分歧很大。"},
+  {id:"hicann",name:"高效价大麻制品",cat:"酒精与大麻",tier:3,plus:true,r:[3,2,3,0,3,2,3,3,2],
+   why:"浓缩制品与精神病风险的关联更强，但证据仍有争议。单独牌照，限制单次剂量。",
+   now:"多数合法地区没有效价上限。"},
+  {id:"bupe",name:"丁丙诺啡",cat:"治疗与致幻",tier:5,r:[1,3,2,1,1,1,0,2,4],
+   why:"有天花板效应，单用过量风险低。它的管制代价是全表最高：拦住它，就是拦住阿片成瘾的治疗。应允许任何处方者开具、药剂师续药。",
+   now:"美国已取消特别处方许可，但单靠这一步效果有限。"},
+  {id:"psilo",name:"裸盖菇素",cat:"治疗与致幻",tier:7,r:[0,0,1,0,0,1,4,3,3],
+   why:"几乎不成瘾，耐受快到会自我限制。风险集中在急性心理危机，所以对应有人陪同的受监督使用，而不是处方或禁止。",
+   now:"美国联邦为 Schedule I；俄勒冈和科罗拉多有受监督项目。"}
+];
+const CATS = ["全部","助眠","兴奋剂","尼古丁","酒精与大麻","治疗与致幻"];
+
+function tierOf(n){return TIERS[n-1]}
+function el(tag,attrs,html){const e=document.createElement(tag);if(attrs)for(const k in attrs)e.setAttribute(k,attrs[k]);if(html!=null)e.innerHTML=html;return e}
+
+// ladder, top = 7
+const ladder=document.getElementById("ladder");
+[...TIERS].reverse().forEach(t=>{
+  const rung=el("div",{class:"rung",style:`--tc:var(${t.c})`});
+  const left=el("div",null,`<div class="num">${t.n}</div>`);
+  const right=el("div");
+  right.appendChild(el("div",{class:"tname"},t.name));
+  right.appendChild(el("div",{class:"tdesc"},t.desc));
+  const chips=el("div",{class:"chips"});
+  const items=S.filter(s=>s.tier===t.n);
+  if(!items.length) chips.appendChild(el("span",{class:"empty"},"本草案中暂无条目"));
+  items.forEach(s=>{
+    const b=el("button",{class:"chip",type:"button"},s.name+(s.plus?"<sup>+</sup>":""));
+    b.addEventListener("click",()=>openCard(s.id));
+    chips.appendChild(b);
+  });
+  right.appendChild(chips);
+  rung.appendChild(left);rung.appendChild(right);
+  ladder.appendChild(rung);
+});
+
+// cards
+const cards=document.getElementById("cards");
+S.forEach(s=>{
+  const t=tierOf(s.tier);
+  const d=el("details",{class:"sub",id:"s-"+s.id,"data-cat":s.cat,style:`--tc:var(${t.c});--tt:var(${t.dark?"--tt-dark":"--tt-light"})`});
+  const sum=el("summary");
+  sum.innerHTML=`<span class="name">${s.name}</span><span class="cat">${s.cat}</span><span class="badge">${s.tier}${s.plus?"+":""} ${t.name}</span><span class="caret" aria-hidden="true">›</span>`;
+  d.appendChild(sum);
+  const body=el("div",{class:"body"});
+  let i=0;
+  DIMS.forEach(([key,title,list])=>{
+    const g=el("div",{class:"group"+(key==="sys"?" sysg":"")});
+    g.appendChild(el("h3",null,title));
+    list.forEach(([,label])=>{
+      const v=s.r[i++];
+      let segs="";for(let k=1;k<=4;k++)segs+=`<span class="seg${k<=v?" on":""}"></span>`;
+      g.appendChild(el("div",{class:"dim"},`<span>${label}</span><span class="bar" role="img" aria-label="${label}：${WORD[v]}">${segs}</span><span class="w">${WORD[v]}</span>`));
+    });
+    body.appendChild(g);
+  });
+  body.appendChild(el("p",{class:"why"},s.why));
+  body.appendChild(el("p",{class:"now"},"与现实的差别："+s.now));
+  d.appendChild(body);
+  cards.appendChild(d);
+});
+
+// filters
+const filters=document.getElementById("filters");
+CATS.forEach((c,idx)=>{
+  const b=el("button",{type:"button","aria-pressed":idx===0?"true":"false"},c);
+  b.addEventListener("click",()=>setFilter(c));
+  filters.appendChild(b);
+});
+function setFilter(c){
+  [...filters.children].forEach(b=>b.setAttribute("aria-pressed",b.textContent===c?"true":"false"));
+  document.querySelectorAll("details.sub").forEach(d=>{d.hidden=!(c==="全部"||d.dataset.cat===c)});
+}
+function openCard(id){
+  setFilter("全部");
+  const d=document.getElementById("s-"+id);
+  d.open=true;
+  const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  d.scrollIntoView({behavior:reduce?"auto":"smooth",block:"start"});
+  d.classList.remove("flash");void d.offsetWidth;d.classList.add("flash");
+  d.querySelector("summary").focus({preventScroll:true});
+}
+</script>
+</body>
+</html>
