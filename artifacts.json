@@ -7,5 +7,14 @@
     "format": "交互图解",
     "added": "2026-10-27",
     "file": "artifacts/psychoactive-substances.html"
+  },
+  {
+    "slug": "violent-demographic-clearing",
+    "title": "暴力人口出清 (伪 Wiki)",
+    "description": "以百科式排版呈现原稿的理论框架、机制矩阵、历史案例与哲学讨论。支持目录、页内搜索和阅读设置。",
+    "category": "概念笔记",
+    "format": "伪 Wiki",
+    "added": "2026-10-27",
+    "file": "artifacts/violent-demographic-clearing/index.html"
   }
 ]
