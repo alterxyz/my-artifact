@@ -7,8 +7,9 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "dev": "bun run build && wrangler dev",
-    "check": "bun run build && wrangler deploy --dry-run",
-    "deploy": "bun run build && wrangler deploy"
+    "check": "node scripts/check-public-files.mjs && bun run build && wrangler deploy --dry-run",
+    "deploy": "node scripts/check-public-files.mjs && bun run build && wrangler deploy",
+    "setup-hooks": "git config core.hooksPath .githooks"
   },
   "devDependencies": {
     "wrangler": "4.153.0"

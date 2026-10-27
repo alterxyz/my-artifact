@@ -45,6 +45,9 @@ Worker or Pages project for each HTML file.
   selected platform's secret storage.
 - Before publishing, review the staged files and the history being pushed.
   Keep local deployment records, backups, and folder-management metadata private.
+- Run `bun run setup-hooks` once in a new clone. The pre-push hook checks every
+  unpublished commit for private folder paths, even if a file was later removed,
+  and blocks `local/` history branches. Do not bypass it with `--no-verify`.
 - Preserve existing work and deployment identity. Do not deploy an unrelated
   service or change the blog's domain.
 

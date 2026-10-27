@@ -30,6 +30,7 @@ dist/               自动生成，仅此目录用于发布
 
 ```sh
 bun install --frozen-lockfile
+bun run setup-hooks
 bun run dev
 ```
 
@@ -73,6 +74,10 @@ push 和 PR 时自动运行相同检查。**GitHub push 不会自动部署到 Cl
 采用本地登录发布，免于为一个小型静态站维护另一套 CI 部署凭据。
 登录过期时用 `bunx wrangler login` 恢复；凭据由 Wrangler 在项目外保存。
 仅上传 `dist/`，忽略历史、依赖、备份和本机管理文件。
+
+Regent 管理目录和本地记录已列入 `.gitignore`。本地 pre-push 检查还会检查
+待推送的每个提交，拦截强制加入索引的管理文件及 `local/` 私有历史分支；
+构建检查和 GitHub CI 也会检查 Git 跟踪文件。检查只读路径，不读取私密正文。
 
 若自行托管此开源项目，请先修改 `wrangler.jsonc` 的 Worker 名称和域名，
 以及 `site/index.html`、`scripts/build.mjs` 中的站点和源码地址，再部署到
