@@ -1,6 +1,6 @@
-import { readFile, writeFile, mkdir, copyFile, readdir, rename } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, copyFile, readdir, rename, realpath, lstat } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { resolve, relative, dirname } from 'node:path';
+import { resolve, relative, dirname, isAbsolute } from 'node:path';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const out = resolve(root, 'dist');
@@ -20,7 +20,11 @@ for (const item of items) {
   if (item.file) {
     const source = resolve(root, item.file);
     const sourceRelative = relative(root, source);
-    if (sourceRelative.startsWith('..') || sourceRelative.split(/[\\/]/).some(part => part.startsWith('.')) || !sourceRelative.endsWith('.html')) throw new Error(`Only explicit project HTML files may be published: ${item.slug}`);
+    if (!sourceRelative.startsWith('artifacts/') || sourceRelative.split(/[\\/]/).some(part => part.startsWith('.')) || !sourceRelative.endsWith('.html')) throw new Error(`Only explicit HTML files inside artifacts/ may be published: ${item.slug}`);
+    const publicRoot = resolve(root, 'artifacts');
+    if ((await lstat(publicRoot)).isSymbolicLink()) throw new Error('artifacts/ must be a real public-source directory.');
+    const publicRelative = relative(await realpath(publicRoot), await realpath(source));
+    if (publicRelative.startsWith('..') || isAbsolute(publicRelative)) throw new Error(`Public HTML must not link outside artifacts/: ${item.slug}`);
     const original = await readFile(source, 'utf8');
     if (!original.includes('</body>')) throw new Error(`Missing closing body: ${item.slug}`);
     const backLink = '<nav aria-label="返回索引与源码" style="max-width:46rem;margin:0 auto;padding:0 1.25rem 2rem;font:13px/1.6 system-ui,sans-serif"><a href="/" style="color:inherit;text-decoration:underline;text-underline-offset:4px">← 返回 Artifacts 索引</a><p>© 2026 alterxyz · AGPL-3.0-or-later · 无担保 · <a href="https://github.com/alterxyz/my-artifact" style="color:inherit">源码与商业授权</a></p></nav>';

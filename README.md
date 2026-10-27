@@ -19,7 +19,9 @@ HTML 创建独立的 Worker 或 Pages 项目。链接型条目也可以直接指
 
 ```text
 artifacts.json      作品清单
-artifacts/          原始、自包含 HTML
+drop-in/            私有收件箱，Git ignored，Regent ensure
+archive/            私有留存成品，Git ignored，Regent ensure
+artifacts/          获准公开的自包含 HTML
 site/               首页模板与样式
 scripts/build.mjs   构建与清单验证
 wrangler.jsonc      整站托管配置
@@ -38,7 +40,19 @@ bun run dev
 
 ## 收录作品
 
-将 HTML 放入 `artifacts/`，在 `artifacts.json` 添加：
+原始材料先放入 `drop-in/`。处理后，每项选择一个正式归宿：
+
+- 通过隐私检查或清理后，仅需留存的成品移到 `archive/`。
+- 获准公开的成品直接移到 `artifacts/`；不必先在归档里留副本。
+- 已归档的成品以后要公开时，从 `archive/` 移到 `artifacts/`。
+
+`drop-in/` 和 `archive/` 都不进入 GitHub 或网站。使用 Regent 的本地实例时，
+应将两棵目录显式加入 `ensure_upload`；空目录与子项均需覆盖。
+放入收件箱或完成清理，都不自动表示同意公开。每份成品只保留一个正式文件，
+构建产生的 `dist/` 可随时重建。
+
+构建器只接受 `artifacts/` 内的本地 HTML，并拒绝指向目录外的符号链接。
+对于准备公开的作品，在 `artifacts.json` 添加：
 
 ```json
 {

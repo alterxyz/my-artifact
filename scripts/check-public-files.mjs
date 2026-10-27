@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 
 // Inspect Git path metadata only. Never open local keys or folder records.
 const git = (...args) => execFileSync('git', args, { encoding: 'utf8' });
-const forbidden = name => name.split('/').some(part =>
+const forbidden = name => /^(drop-in|archive)(\/|$)/.test(name) || name.split('/').some(part =>
   ['regent-consulate', 'office-of-regent-managed-folder', '.regent-of-folders', '.local', 'regent-managed-folder.md'].includes(part)
   || part.endsWith('.regent-managed-folder') || part.endsWith('.folder-readme'));
 const inspect = (paths, label) => {

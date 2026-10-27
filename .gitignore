@@ -15,3 +15,5 @@ regent-managed-folder.md
 office-of-regent-managed-folder/
 *.regent-managed-folder/
 *.folder-readme
+/drop-in/
+/archive/

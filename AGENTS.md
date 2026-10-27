@@ -7,7 +7,9 @@ Worker or Pages project for each HTML file.
 ## Source of truth
 
 - `artifacts.json`: the published collection, titles, stable slugs, and source files or external URLs.
-- `artifacts/`: self-contained HTML originals; preserve their content and interaction.
+- `drop-in/`: private, Git-ignored inbox for incoming material; covered by local Regent ensure rules.
+- `archive/`: private, Git-ignored home for cleaned, organized work retained without publication; also ensured.
+- `artifacts/`: approved public HTML source; preserve its content and interaction.
 - `site/`: index template, styles, favicon, and 404 page.
 - `scripts/build.mjs`: validates the manifest and creates the explicit public allowlist in `dist/`.
 - `wrangler.jsonc`: configuration for the whole site, including its existing Worker name and domain.
@@ -19,18 +21,38 @@ Worker or Pages project for each HTML file.
 
 ## Adding an artifact
 
-1. Inspect the supplied HTML for local dependencies, private information, and unexpected network requests.
-2. Save it under `artifacts/` and add one manifest entry with `slug`, `title`,
+1. Receive unreviewed material in `drop-in/`. Placement in the inbox is not
+   publication permission. Inspect the specified material for local dependencies,
+   private information, and unexpected network requests before processing it.
+2. After privacy review or sanitization, choose one canonical destination:
+   move retained work into `archive/`, or move work approved for public release
+   directly into `artifacts/`. Do not keep an identical second copy in the other
+   directory. When publishing a previously archived item, move it from the archive.
+   If material cannot be made privacy-safe, leave it in the private inbox and report
+   the unresolved issue. Do not silently publish it or discard it.
+3. For a public item, add one manifest entry with `slug`, `title`,
    `description`, `category`, `format`, `added` (`YYYY-MM-DD`), and `file`.
    For a link-only item use a full HTTP(S) `url` instead of `file`.
-3. Keep existing slugs stable when renaming a title. Paths are shareable permanent links.
-4. Imported HTML currently needs to be self-contained. Before adding a bundle,
+4. Keep existing slugs stable when renaming a title. Paths are shareable permanent links.
+5. Imported HTML currently needs to be self-contained. Before adding a bundle,
    extend the explicit asset allowlist for its own subdirectory; do not copy a
    broad source directory or introduce a second deployment.
-5. Run `bun run check`, preview the index and new page with `bun run dev`, and
+6. Run `bun run check`, preview the index and new page with `bun run dev`, and
    verify desktop/mobile layout, interactions, and the return link.
-6. When publication is authorized, run `bun run deploy` once for the whole site.
+7. When publication is authorized, run `bun run deploy` once for the whole site.
    Verify the deployed page and commit/push the matching public source.
+
+The inbox and archive are not Git or website content. Their local Regent board
+must ensure both subtrees; Git ignore is not a backup policy. Board identities,
+receipts, and other local storage configuration stay in ignored local metadata.
+If a rule change invalidates an in-flight backup task, use the normal Regent
+task workflow and report the actual state; do not bypass locks or claim backup
+completion from an ensure setting alone.
+
+The build only accepts local files inside the real `artifacts/` directory and
+rejects links escaping it. Never point the public manifest at the inbox or archive.
+`dist/` is regenerable deployment output. Its generated copies are not archival
+masters; do not use it as a second permanent copy of finished work.
 
 ## Build, deployment, and GitHub
 
