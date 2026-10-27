@@ -15,6 +15,12 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: node scripts/check-public-files.mjs --ci-history
+        env:
+          BASE_REV: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_REV: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: 1.4.2

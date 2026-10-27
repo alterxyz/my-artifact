@@ -10,6 +10,12 @@ const inspect = (paths, label) => {
   const blocked = paths.filter(Boolean).filter(forbidden);
   if (blocked.length) throw new Error(`${label} contains private local paths:\n${blocked.join('\n')}`);
 };
+const inspectCommits = commits => {
+  if (commits.length > 200) throw new Error('More than 200 commits; perform a bounded privacy review before publication.');
+  for (const commit of new Set(commits)) {
+    inspect(git('ls-tree', '-r', '--name-only', '-z', commit).split('\0'), commit.slice(0, 12));
+  }
+};
 
 try {
   if (process.argv.includes('--pre-push')) {
@@ -21,16 +27,24 @@ try {
       if (/^0+$/.test(sha)) continue;
       // Include every unpublished commit, including files later deleted again.
       const commits = git('rev-list', '--max-count=201', sha, '--not', '--remotes=origin').trim().split('\n').filter(Boolean);
-      if (commits.length > 200) throw new Error('More than 200 unpublished commits; perform a bounded privacy review before pushing.');
-      for (const commit of commits) {
-        if (seen.has(commit)) continue;
-        seen.add(commit);
-        inspect(git('ls-tree', '-r', '--name-only', '-z', commit).split('\0'), commit.slice(0, 12));
-      }
+      inspectCommits(commits.filter(commit => !seen.has(commit)));
+      commits.forEach(commit => seen.add(commit));
     }
     console.log('Public-path check passed for unpublished history.');
   } else {
     inspect(git('ls-files', '--cached', '-z').split('\0'), 'Git index');
+    if (process.argv.includes('--ci-history')) {
+      const head = process.env.HEAD_REV;
+      const base = process.env.BASE_REV;
+      if (!/^[0-9a-f]{40}$/.test(head ?? '')) throw new Error('Missing or invalid CI head revision.');
+      if (base && !/^[0-9a-f]{40}$/.test(base)) throw new Error('Invalid CI base revision.');
+      // Manual runs without a base inspect HEAD; push/PR runs inspect the full
+      // newly introduced range. A new branch has an all-zero base.
+      const args = !base ? ['--max-count=1', head]
+        : ['--max-count=201', head, ...(/^0+$/.test(base) ? [] : [`^${base}`])];
+      inspectCommits(git('rev-list', ...args).trim().split('\n').filter(Boolean));
+      console.log('Public-path check passed for the CI commit range.');
+    }
     console.log('Public-path check passed for the Git index.');
   }
 } catch (error) {
