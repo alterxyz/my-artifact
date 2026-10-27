@@ -33,6 +33,9 @@ Worker or Pages project for each HTML file.
 3. For a public item, add one manifest entry with `slug`, `title`,
    `description`, `category`, `format`, `added` (`YYYY-MM-DD`), and `file`.
    For a link-only item use a full HTTP(S) `url` instead of `file`.
+   Optional card covers use `cover` (a local image inside `artifacts/`) and a
+   descriptive `cover_alt`. Only the explicitly listed image is copied to the
+   public build; the same path and symlink restrictions as HTML apply.
 4. Keep existing slugs stable when renaming a title. Paths are shareable permanent links.
    Append new entries to the manifest. The homepage sorts by `added` descending;
    for equal dates, later manifest entries appear first.

@@ -66,6 +66,10 @@ bun run dev
 }
 ```
 
+首页卡片可选填 `cover`（例如 `artifacts/my-work/cover.webp`）和画面描述
+`cover_alt`。构建仅复制清单指定的封面图片，支持 WebP、PNG、JPEG 和 AVIF；
+建议使用横向图片，主体居中，适配桌面和手机卡片裁切。
+
 发布后地址为 `/artifacts/my-work/`。`slug` 用作永久链接，改标题时保留它。
 首页按收录日期倒序展示；同一天收录时，清单里后加入的条目排在前面。新条目追加到清单末尾即可。
 外部作品将 `file` 换成完整的 `url`，两者只选一个。原 HTML 内容保持独立，
