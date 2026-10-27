@@ -34,6 +34,8 @@ Worker or Pages project for each HTML file.
    `description`, `category`, `format`, `added` (`YYYY-MM-DD`), and `file`.
    For a link-only item use a full HTTP(S) `url` instead of `file`.
 4. Keep existing slugs stable when renaming a title. Paths are shareable permanent links.
+   Append new entries to the manifest. The homepage sorts by `added` descending;
+   for equal dates, later manifest entries appear first.
 5. Imported HTML currently needs to be self-contained. Before adding a bundle,
    extend the explicit asset allowlist for its own subdirectory; do not copy a
    broad source directory or introduce a second deployment.

@@ -38,10 +38,12 @@ for (const item of items) {
   const preview = item.slug === 'psychoactive-substances'
     ? `<span class="preview-caption">A THOUGHT EXPERIMENT</span><div class="ladder" aria-hidden="true">${['#cfe6d8','#a9d3be','#e9d8a6','#e7b87e','#e3a07a','#c8674f','#9b5c8c','#6e1e3a'].map((color, index) => `<span style="--step:${color};--height:${36 + index * 15}px"></span>`).join('')}</div><div class="preview-foot"><span>从零开始，重新分级</span><span>01 — 08</span></div>`
     : `<span class="preview-caption">${escape(item.category)}</span><span style="font:72px Georgia,serif;opacity:.45" aria-hidden="true">↗</span><div class="preview-foot"><span>${escape(item.format)}</span><span>ARTIFACT</span></div>`;
-  cards.push(`<a class="work" href="${escape(href)}"${item.url ? ' rel="noopener noreferrer"' : ''}><div class="preview">${preview}</div><div class="work-content"><div class="work-meta"><span class="category">${escape(item.category)}</span><time datetime="${escape(item.added)}">${escape(item.added.replaceAll('-', '.'))}</time></div><h3>${escape(item.title)}</h3><p class="work-description">${escape(item.description)}</p><div class="work-bottom"><span class="format">${escape(item.format)}${item.url ? ' · 外部页面' : ' · HTML'}</span><span class="open-link">打开作品 <span class="open-arrow" aria-hidden="true">↗</span></span></div></div></a>`);
+  cards.push({ added: item.added, index: cards.length, html: `<a class="work" href="${escape(href)}"${item.url ? ' rel="noopener noreferrer"' : ''}><div class="preview">${preview}</div><div class="work-content"><div class="work-meta"><span class="category">${escape(item.category)}</span><time datetime="${escape(item.added)}">${escape(item.added.replaceAll('-', '.'))}</time></div><h3>${escape(item.title)}</h3><p class="work-description">${escape(item.description)}</p><div class="work-bottom"><span class="format">${escape(item.format)}${item.url ? ' · 外部页面' : ' · HTML'}</span><span class="open-link">打开作品 <span class="open-arrow" aria-hidden="true">↗</span></span></div></div></a>` });
 }
+// Newest collection date first; later manifest entries win same-day ties.
+const orderedCards = cards.sort((a, b) => b.added.localeCompare(a.added) || b.index - a.index);
 const template = await readFile(resolve(root, 'site/index.html'), 'utf8');
-pages.push({ path: 'index.html', content: template.replace('{{COUNT}}', String(items.length).padStart(2, '0')).replace('{{ARTIFACTS}}', cards.join('\n')) });
+pages.push({ path: 'index.html', content: template.replace('{{COUNT}}', String(items.length).padStart(2, '0')).replace('{{ARTIFACTS}}', orderedCards.map(card => card.html).join('\n')) });
 const assetNames = ['style.css', 'favicon.svg', '404.html'];
 const expected = new Set([...pages.map(page => page.path), ...assetNames, '_headers', 'robots.txt', 'sitemap.xml']);
 // Publish only the current allowlist. Preserve stale generated output locally,
