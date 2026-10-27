@@ -6,7 +6,9 @@
     "category": "思想实验",
     "format": "交互图解",
     "added": "2026-10-27",
-    "file": "artifacts/psychoactive-substances.html"
+    "file": "artifacts/psychoactive-substances.html",
+    "cover": "artifacts/psychoactive-substances/cover.webp",
+    "cover_alt": "晨光中的透明悬浮阶梯与未来理想城，流动光谱连接不同层次。"
   },
   {
     "slug": "violent-demographic-clearing",
