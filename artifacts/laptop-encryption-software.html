@@ -102,6 +102,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:49;
 .cz.real{color:var(--c-acc);text-shadow:-1px 0 rgba(255,60,140,.6),1px 0 rgba(40,240,255,.5)}
 .named{font-size:18px;font-weight:700;letter-spacing:1px;color:#fff;margin:4px 0 14px!important;
   text-shadow:0 0 10px rgba(255,63,164,.65),0 0 22px rgba(37,227,240,.35)}
+.named small{font-size:13px;font-weight:400;letter-spacing:0;color:var(--c-meta);text-shadow:none}
 .trn{font-size:12px;color:var(--c-meta);margin-top:12px}
 .tro{cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
 .deleted{padding:12px 20px;margin-bottom:12px;font-size:13.5px;color:var(--c-meta);border-style:dashed}
@@ -177,7 +178,7 @@ body>nav[aria-label="返回索引与源码"]{position:relative;z-index:5;color:#
   <div class="crumb">首页 › <b>软件求助</b> › 帖子详情</div>
   <section class="card era-0 thread-head">
     <h1><span class="tag ok">已解决</span><span class="tag help">求助</span>笔记本怕被偷，有没有靠谱的加密软件推荐？</h1>
-    <div class="thread-stat">查看 48,213 · 回复 53 · 发帖于 2023-03-14</div>
+    <div class="thread-stat">查看 48,213 · 回复 56 · 发帖于 2023-03-14</div>
   </section>
   <div id="thread"></div>
   <footer class="foot">
@@ -222,7 +223,7 @@ const T = [
 <p>登录了微软账号的话，恢复密钥默认会备份到账号里，这个是真的。</p>
 <p>但这跟你的需求没关系。<b>你的对手是地铁上的小偷，不是微软。</b></p>`},
 {u:'key',era:0,t:'2023-03-14 23:40',ip:'美国',b:`
-<p>版主这话我不太同意。「你的对手是谁」这个问题，你永远不知道真正的答案。</p>
+<p>版主这话我不太同意。「你的对手是谁」这个问题，你永远不知道真正的答案。十年前斯诺登把文件带出来之前，大家也都以为自己的对手只是小偷。</p>
 <p>开源的东西至少能审计，闭源的你只能信。楼主上 VeraCrypt 吧，不难。</p>
 <p>顺便，有空先把 <span class="cz">编程██</span> 的博客从头翻一遍，比官方文档好懂。博主两年前停更了，文章都还在。</p>
 <p>会打开新世界的。</p>`,sig:'<span class="mono">Trust the math, not the vendor.</span>'},
@@ -267,6 +268,10 @@ const T = [
 <p>改了个名。旧 ID 和我的真名、手机号关联太多了。</p>
 <p>现在上论坛都走 Tor，所以 IP 属地显示的是出口节点的国家，不用在意。</p>`,sig:'<span class="mono">PGP 7E3A 91C0 ···· 4F2D B8E1</span>'},
 {u:'calm',era:2,t:'2024-01-09 10:31',ip:'马来西亚',b:`<p>楼主不觉得有点过了吗？工具是中性的，你拿它锁客户资料就行了，为什么要搞得跟在逃一样？</p>`},
+{u:'key',era:2,t:'2024-01-09 11:47',ip:'美国',b:`
+<p>@理性讨论 楼主签名里那串 PGP，三十年前出口要按军火管。</p>
+<p>写它的齐默尔曼，因为 PGP 从网上流到了国外，被美国政府按「非法出口军火」查了三年。后来案子撤了，现在谁都能用。</p>
+<p>你现在觉得过了的东西，当年也有人觉得过了。</p>`,sig:'<span class="mono">Trust the math, not the vendor.</span>'},
 {u:'op',era:2,uo:{n:'zs_0x7e',note:'曾用名：今天也要早睡',av:'◐',ab:'#b9b0d2',g:'中级会员',posts:'187'},t:'2024-01-09 13:55',ip:'荷兰',b:`<p>……我也说不清。</p><p>就是一旦知道了，就没法假装不知道。</p>`,sig:'<span class="mono">PGP 7E3A 91C0 ···· 4F2D B8E1</span>'},
 {u:'cat',era:2,t:'2024-01-09 21:08',ip:'加拿大',b:`
 <p>@理性讨论 「工具是中性的」，这话没错，但没用。</p>
@@ -295,6 +300,8 @@ const T = [
 {u:'look',era:2,t:'2024-03-02 01:26',ip:'美国',b:`<p>萌新问一下，Tor 除了保护隐私还能干嘛？听说里面有市场？</p>`},
 {u:'cat',era:2,t:'2024-03-02 08:15',ip:'加拿大',b:`<p>别。</p>`},
 {u:'look',era:2,t:'2024-03-02 13:40',ip:'美国',shield:true},
+{u:'night',era:2,t:'2024-06-26 23:40',ip:'日本',b:`<p>阿桑奇出来了。</p><p>使馆里七年，监狱里五年。最后认了一条罪，坐上了回澳大利亚的飞机。</p>`},
+{u:'op',era:2,uo:{n:'zs_0x7e',note:'曾用名：今天也要早睡',av:'◐',ab:'#b9b0d2',g:'中级会员',posts:'198'},t:'2024-06-27 02:14',ip:'荷兰',b:`<p>这算回来了吗。</p>`,sig:'<span class="mono">PGP 7E3A 91C0 ···· 4F2D B8E1</span>'},
 {u:'fish',era:2,uo:{av:'💼',ab:'#cfe0f0',g:'中级会员',posts:'412'},t:'2024-07-02 22:30',ip:'新加坡',b:`
 <p>冒个泡。毕业了，入职某大厂甲方安全。</p>
 <p>现在每天的工作是给员工电脑装终端管控和 DLP，防止有人把公司资料带走。当年在这个帖子里推荐 VeraCrypt 的人，现在的 KPI 是抓员工偷偷用 VeraCrypt。</p>
@@ -308,6 +315,7 @@ const T = [
 {u:'mira',era:2,uo:{av:'🌴',ab:'#c9efd9'},t:'2024-10-28 16:05',ip:'泰国',b:`
 <p>好久不见！我辞职了。</p>
 <p>现在在清迈远程接活，收稳定币，三个月换一个城市。加密这一套东西一路陪我走到了这里。</p>
+<p>接活、收款、租房，全靠几个 Telegram 群。八月杜罗夫在巴黎被扣那几天，群里一半人连夜装了 Signal，过了两周又都回来了。</p>
 <p>说实话，我挺快乐的。</p>`},
 {u:'night',era:2,t:'2024-12-13 23:50',ip:'日本',b:`<p><span class="cz">██随想</span>，二审维持原判。</p><p>开庭七分钟。</p>`},
 
@@ -343,8 +351,8 @@ const T = [
 <p>三年前我发这个帖子，只是怕笔记本在地铁上被偷。</p>
 <p>现在我用 Tails，不用微信，手机平时放在屏蔽袋里，IP 属地显示荷兰。客户还是那些客户，资料还是那些资料。我不觉得我做错了什么，也不知道还回不回得去。</p>
 <p>老猫说的四步，我在第四步的路口站了很久。往哪边走都有人走过，往哪边走都有人再也没回来。</p>
-<p>有几个人，走在所有人前面。</p>
-<p class="named">齐 默 尔 曼。<br>阿 桑 奇。<br>斯 诺 登。<br>杜 罗 夫。<br>编 程 随 想。阮 晓 寰。</p>
+<p>这三年，帖子里提到过的那几个人，都走在所有人前面。</p>
+<p class="named">齐 默 尔 曼<small>（PGP 的作者）</small>。<br>阿 桑 奇<small>（维基解密创办人）</small>。<br>斯 诺 登。<br>杜 罗 夫<small>（Telegram 创始人）</small>。<br>编 程 随 想。阮 晓 寰。</p>
 <p>（中间的空格，是最后一位教的。）</p>
 <p>这个帖子我想留着，给以后搜到这里的人。</p>
 <p><b>你们来的时候，只是想保护文件。我也是。</b></p>`},
