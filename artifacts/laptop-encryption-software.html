@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>【求助】笔记本怕被偷，有没有靠谱的加密软件推荐？ - 小机房</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --page:#e9edf2; --head:#2f5d8a;
+  --scan:0; --noise:0; --vig:0; --blob:0;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+  font-size:15px; line-height:1.78; color:#23262b;
+  background:var(--page); position:relative; overflow-x:hidden;
+}
+
+/* ---------- ambient layers (never touch post text colors) ---------- */
+.blob{position:fixed;width:46vw;height:46vw;border-radius:50%;filter:blur(90px);opacity:var(--blob);pointer-events:none;z-index:0;transition:opacity .4s}
+.blob.a{background:#ff3fa4;left:-18vw;top:10vh;animation:float1 14s ease-in-out infinite}
+.blob.b{background:#25e3f0;right:-18vw;top:45vh;animation:float2 17s ease-in-out infinite}
+@keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(6vw,12vh)}}
+@keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(-5vw,-14vh)}}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:50;
+  background:repeating-linear-gradient(0deg,transparent 0 2px,rgba(0,0,0,var(--scan)) 2px 3px)}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:49;
+  background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,var(--vig)) 100%)}
+.noise{position:fixed;top:-50%;left:-50%;width:200%;height:200%;pointer-events:none;z-index:48;opacity:var(--noise);
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:nz .4s steps(3) infinite}
+@keyframes nz{0%{transform:translate(0)}33%{transform:translate(-4%,3%)}66%{transform:translate(3%,-4%)}}
+
+/* cracks */
+#cracks{position:absolute;top:0;left:0;pointer-events:none;z-index:6;overflow:visible}
+#cracks path{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.6s cubic-bezier(.2,.7,.2,1)}
+#cracks .s{stroke:rgba(0,0,0,.55);stroke-width:1.6}
+#cracks .h{stroke:rgba(255,255,255,.42);stroke-width:.9}
+#cracks g.on path{stroke-dashoffset:0}
+
+/* ---------- header ---------- */
+.top{position:sticky;top:0;z-index:40;background:var(--head);color:#fff;box-shadow:0 1px 0 rgba(0,0,0,.15)}
+.top-in{max-width:1000px;margin:0 auto;padding:0 18px;height:50px;display:flex;align-items:center;gap:22px}
+.logo{font-weight:700;font-size:17px;letter-spacing:1px;white-space:nowrap}
+.logo small{font-weight:400;font-size:12px;opacity:.75;margin-left:6px;letter-spacing:0}
+.nav{display:flex;gap:16px;font-size:14px;opacity:.9}
+.nav span{cursor:default}
+.nav .cur{border-bottom:2px solid rgba(255,255,255,.8);padding-bottom:2px}
+.top-r{margin-left:auto;font-size:12.5px;opacity:.85;white-space:nowrap;text-align:right;line-height:1.35}
+.flick{animation:flk .14s steps(2) 1}
+@keyframes flk{0%{opacity:.35;filter:hue-rotate(90deg)}100%{opacity:1}}
+
+/* ---------- layout ---------- */
+.wrap{max-width:1000px;margin:0 auto;padding:18px 18px 60px;position:relative;z-index:5}
+.crumb{font-size:13px;color:#7a8594;margin:4px 2px 12px}
+.crumb b{color:#2f5d8a;font-weight:500}
+
+/* era palettes: fixed per post, never interpolated */
+.era-0{--c-bg:#fff;--c-ubg:#f3f6fa;--c-tx:#23262b;--c-meta:#8a93a0;--c-bd:#d5dce5;--c-name:#2f5d8a;--c-acc:#2f5d8a;--c-sig:#9aa3ae}
+.era-1{--c-bg:#fffdf7;--c-ubg:#f5f1e6;--c-tx:#2b2620;--c-meta:#9a8f7c;--c-bd:#e0d6c3;--c-name:#6a4f2a;--c-acc:#b5803a;--c-sig:#a99d88}
+.era-2{--c-bg:#f7f5fb;--c-ubg:#ebe7f2;--c-tx:#211d29;--c-meta:#857c98;--c-bd:#c9c1d9;--c-name:#5b3f8f;--c-acc:#7a52c7;--c-sig:#8a80a0}
+.era-3{--c-bg:#18131f;--c-ubg:#110d17;--c-tx:#e6e0ef;--c-meta:#8e85a2;--c-bd:#30283f;--c-name:#ff8cc6;--c-acc:#ff8cc6;--c-sig:#7d7491}
+.era-4{--c-bg:#0c0812;--c-ubg:#07040b;--c-tx:#f4ecff;--c-meta:#7fd9e3;--c-bd:#ff3fa4;--c-name:#5ff3ff;--c-acc:#ff3fa4;--c-sig:#6b6380}
+
+.card{background:var(--c-bg);color:var(--c-tx);border:1px solid var(--c-bd);border-radius:4px}
+
+.thread-head{padding:18px 22px;margin-bottom:14px}
+.thread-head h1{font-size:21px;font-weight:600;line-height:1.45}
+.tag{display:inline-block;font-size:12px;font-weight:500;padding:1px 8px;border-radius:3px;margin-right:8px;vertical-align:3px}
+.tag.ok{background:#e3f4e8;color:#2c7a45}
+.tag.help{background:#e6eef8;color:#2f5d8a}
+.thread-stat{font-size:13px;color:var(--c-meta);margin-top:8px}
+
+/* posts */
+.post{display:flex;margin-bottom:12px;overflow:hidden;position:relative}
+.up{width:148px;flex-shrink:0;background:var(--c-ubg);border-right:1px solid var(--c-bd);padding:16px 12px;text-align:center}
+.av{width:68px;height:68px;margin:0 auto 8px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:32px;line-height:1;user-select:none}
+.un{font-weight:600;color:var(--c-name);font-size:14px;word-break:break-all;line-height:1.4}
+.unote{font-size:11.5px;color:var(--c-meta);margin-top:2px}
+.ug{display:inline-block;font-size:11.5px;margin-top:6px;padding:0 7px;border-radius:3px;border:1px solid var(--c-bd);color:var(--c-meta)}
+.ug.mod{color:#fff;background:#d9822b;border-color:#d9822b}
+.ug.ban,.ug.gone{color:#fff;background:#888;border-color:#888}
+.ug.warn{color:#fff;background:#a33;border-color:#a33}
+.us{font-size:11.5px;color:var(--c-meta);margin-top:8px;line-height:1.6}
+.pm{flex:1;min-width:0;padding:12px 20px 16px;display:flex;flex-direction:column}
+.meta{font-size:12.5px;color:var(--c-meta);display:flex;flex-wrap:wrap;gap:4px 14px;border-bottom:1px dashed var(--c-bd);padding-bottom:8px;margin-bottom:12px}
+.meta .fl{margin-left:auto;font-weight:600;color:var(--c-acc)}
+.optag{color:#fff;background:var(--c-acc);border-radius:3px;padding:0 6px;font-size:11.5px}
+.pb{flex:1}
+.pb p{margin:0 0 .8em}
+.pb p:last-child{margin-bottom:0}
+.pb b{font-weight:650}
+.pb ol,.pb ul{margin:.3em 0 .8em 1.4em}
+.pb .q{border-left:3px solid var(--c-acc);padding:2px 0 2px 12px;margin:0 0 .8em;color:var(--c-meta);font-size:14px}
+.sig{margin-top:14px;padding-top:8px;border-top:1px solid var(--c-bd);font-size:12.5px;color:var(--c-sig)}
+.mono{font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12px;letter-spacing:.3px}
+.shield{color:var(--c-meta);font-size:13.5px;background:rgba(127,127,127,.08);padding:8px 12px;border-radius:3px}
+.hand{font-family:"Kaiti SC","STKaiti","KaiTi",serif;font-size:17px;letter-spacing:2px;line-height:2.1;color:var(--c-tx);opacity:.9}
+
+.cz{cursor:pointer;border-bottom:1px dotted var(--c-meta);padding:0 1px;white-space:nowrap}
+.cz.real{color:var(--c-acc);text-shadow:-1px 0 rgba(255,60,140,.6),1px 0 rgba(40,240,255,.5)}
+.named{font-size:18px;font-weight:700;letter-spacing:1px;color:#fff;margin:4px 0 14px!important;
+  text-shadow:0 0 10px rgba(255,63,164,.65),0 0 22px rgba(37,227,240,.35)}
+.trn{font-size:12px;color:var(--c-meta);margin-top:12px}
+.tro{cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
+.deleted{padding:12px 20px;margin-bottom:12px;font-size:13.5px;color:var(--c-meta);border-style:dashed}
+.sysline{text-align:center;margin:6px 0 16px}
+.sysline span{display:inline-block;font-size:12.5px;padding:3px 14px;border-radius:20px;background:var(--c-bg);color:var(--c-meta);border:1px solid var(--c-bd)}
+
+.pager{display:flex;align-items:center;gap:12px;margin:30px 0 18px}
+.pager::before,.pager::after{content:'';flex:1;height:1px;background:var(--c-bd);opacity:.8}
+.pager span{font-size:13px;padding:4px 16px;border-radius:20px;background:var(--c-bg);color:var(--c-meta);border:1px solid var(--c-bd);white-space:nowrap}
+
+.lock{padding:14px 20px;margin:4px 0 26px;text-align:center;font-size:14px;color:var(--c-meta)}
+.newest{padding:0;margin-top:10px}
+.newest .nh{padding:10px 18px;border-bottom:1px solid var(--c-bd);font-size:13px;color:var(--c-meta);font-weight:600}
+.newest .row{padding:14px 18px;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
+.newest .row + .row{border-top:1px solid var(--c-bd)}
+.newest .t{color:var(--c-tx);font-size:15px}
+.newest .m{font-size:12.5px;color:var(--c-meta)}
+.newest .you{color:var(--c-name);font-weight:700}
+.typing{font-size:12.5px;color:var(--c-meta);padding:0 18px 14px}
+.typing i{display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--c-meta);margin-left:3px;animation:dot 1.2s infinite}
+.typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
+@keyframes dot{0%,60%,100%{opacity:.2}30%{opacity:1}}
+
+.foot{text-align:center;font-size:12px;color:#8d8799;margin-top:44px;line-height:2}
+.foot b{color:#b9b2c7;font-weight:500}
+
+/* ---------- late-stage corruption (frames only, text stays legible) ---------- */
+.era-3 .un{text-shadow:-1px 0 rgba(255,60,120,.55),1px 0 rgba(40,230,255,.45)}
+.era-4 .un{text-shadow:-1.5px 0 rgba(255,60,140,.7),1.5px 0 rgba(40,240,255,.6)}
+.era-3 .av,.era-4 .av{filter:saturate(.65) brightness(.72)}
+.era-4.card{box-shadow:0 0 0 1px rgba(255,63,164,.25),0 0 22px rgba(255,63,164,.18)}
+.era-4.post{animation:edge 5s infinite}
+@keyframes edge{
+  0%,92%,100%{box-shadow:0 0 0 1px rgba(255,63,164,.25),0 0 22px rgba(255,63,164,.18)}
+  93%{box-shadow:-3px 0 0 1px rgba(37,227,240,.55),0 0 26px rgba(255,63,164,.3)}
+  95%{box-shadow:3px 0 0 1px rgba(255,63,164,.6),0 0 18px rgba(37,227,240,.25)}
+}
+.era-4 .av{animation:avg 6s infinite}
+@keyframes avg{0%,94%,100%{transform:none;filter:none}95%{transform:translate(2px,-1px);filter:hue-rotate(140deg)}97%{transform:translate(-2px,1px)}}
+.newest .row.me{animation:rowg 3.2s infinite}
+@keyframes rowg{0%,88%,100%{transform:none;background:transparent}90%{transform:translateX(3px);background:rgba(255,63,164,.08)}93%{transform:translateX(-2px);background:rgba(37,227,240,.06)}}
+
+@media (max-width:720px){
+  .post{flex-direction:column}
+  .up{width:auto;display:flex;align-items:center;gap:10px;text-align:left;border-right:0;border-bottom:1px solid var(--c-bd);padding:10px 14px}
+  .av{width:40px;height:40px;font-size:20px;margin:0}
+  .us{display:none}
+  .ug{margin-top:0}
+  .pm{padding:10px 14px 14px}
+  .nav{display:none}
+  .thread-head h1{font-size:18px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+/* site return link, appended at build time: keep it legible on the dark ending */
+body>nav[aria-label="返回索引与源码"]{position:relative;z-index:5;color:#8d8799}
+</style>
+</head>
+<body>
+<div class="blob a"></div><div class="blob b"></div><div class="noise"></div>
+<svg id="cracks" xmlns="http://www.w3.org/2000/svg"></svg>
+
+<header class="top" id="top">
+  <div class="top-in">
+    <div class="logo" id="logo">小机房<small>电脑互助论坛</small></div>
+    <nav class="nav"><span>首页</span><span class="cur">软件求助</span><span>硬件</span><span>灌水</span></nav>
+    <div class="top-r"><div id="online">当前在线 1,204 人</div><div id="login">登录 · 注册</div></div>
+  </div>
+</header>
+
+<main class="wrap" id="wrap">
+  <div class="crumb">首页 › <b>软件求助</b> › 帖子详情</div>
+  <section class="card era-0 thread-head">
+    <h1><span class="tag ok">已解决</span><span class="tag help">求助</span>笔记本怕被偷，有没有靠谱的加密软件推荐？</h1>
+    <div class="thread-stat">查看 48,213 · 回复 53 · 发帖于 2023-03-14</div>
+  </section>
+  <div id="thread"></div>
+  <footer class="foot">
+    <div>小机房 · 电脑互助论坛 © 2009–2026</div>
+    <div>你当前的 IP 属地：<b>未知</b></div>
+    <div>本论坛、用户及帖子均为虚构。所描述的现象是真实的。</div>
+  </footer>
+</main>
+
+<script>
+(function(){
+/* ======================= DATA ======================= */
+const U = {
+  op:   {n:'今天也要早睡', g:'新手上路', av:'🌙', ab:'#ffe2b8', posts:'14', j:'2023-03'},
+  cat:  {n:'老猫', g:'版主', gc:'mod', av:'🐱', ab:'#d8e6f5', posts:'21,407', j:'2009-06'},
+  fish: {n:'咸鱼不翻身', g:'新手上路', av:'🐟', ab:'#d3efe4', posts:'86', j:'2022-09'},
+  key:  {n:'十三号密钥', g:'高级会员', av:'🔑', ab:'#e6e0f6', posts:'3,912', j:'2015-11'},
+  pass: {n:'路过的甲乙丙', g:'新手上路', av:'👀', ab:'#eee', posts:'3', j:'2023-03'},
+  mira: {n:'Mira', g:'中级会员', av:'🌿', ab:'#dff3d6', posts:'240', j:'2023-05'},
+  man:  {n:'小满', g:'新手上路', av:'🌾', ab:'#f6ecc8', posts:'31', j:'2023-06'},
+  night:{n:'长夜', g:'中级会员', av:'🌑', ab:'#cfd3dc', posts:'518', j:'2019-02', sig:'<span class="mono">712 篇 · 4497 天</span>'},
+  calm: {n:'理性讨论', g:'中级会员', av:'⚖️', ab:'#e9e9ef', posts:'1,066', j:'2017-08'},
+  tob:  {n:'Tobias', g:'中级会员', av:'T', ab:'#d7e3ee', posts:'402', j:'2018-04'},
+  look: {n:'随便看看', g:'禁止发言', gc:'ban', av:'🛒', ab:'#bbb', posts:'4', j:'2024-03'},
+  foil: {n:'铝箔帽', g:'中级会员', av:'📡', ab:'#d9dde2', posts:'733', j:'2020-01'},
+  qb:   {n:'quietbit', g:'中级会员', av:'Q', ab:'#d5dbe6', posts:'158', j:'2021-07'},
+  water:{n:'白开水', g:'中级会员', av:'💧', ab:'#dcefff', posts:'2,881', j:'2024-08'}
+};
+
+const T = [
+{pg:'第 1 页'},
+{u:'op',era:0,t:'2023-03-14 22:41',ip:'广东',b:`
+<p>如题。本人自由设计师，笔记本里有客户合同、报价单，还有几个客户发来的身份证扫描件。</p>
+<p>上周同事的电脑在地铁上丢了，到现在还被客户追着问资料有没有泄露，看得我后背发凉。</p>
+<p>想给电脑加个密，<b>越简单越好</b>，我不太懂电脑。先谢谢各位大佬了 🙏</p>`,sig:'今天也要早睡，明天也要早睡。'},
+{u:'cat',era:0,t:'2023-03-14 22:58',ip:'加拿大',b:`
+<p>Win 专业版直接开 BitLocker，Mac 打开 FileVault，家庭版看看设置里有没有「设备加密」。</p>
+<p>打个勾，重启，完事。防小偷，这个就够了。</p>`,sig:'BitLocker 不丢人。'},
+{u:'fish',era:0,t:'2023-03-14 23:07',ip:'湖北',b:`<p>也可以试试 VeraCrypt，开源免费跨平台，我们学校安全社团人手一个。</p>`},
+{u:'op',era:0,t:'2023-03-14 23:15',ip:'广东',b:`<p>谢谢！刚搜了一下 BitLocker，看到有人说<b>微软能拿到恢复密钥</b>？真的假的……那加了跟没加有什么区别</p>`},
+{u:'cat',era:0,t:'2023-03-14 23:21',ip:'加拿大',b:`
+<p>登录了微软账号的话，恢复密钥默认会备份到账号里，这个是真的。</p>
+<p>但这跟你的需求没关系。<b>你的对手是地铁上的小偷，不是微软。</b></p>`},
+{u:'key',era:0,t:'2023-03-14 23:40',ip:'美国',b:`
+<p>版主这话我不太同意。「你的对手是谁」这个问题，你永远不知道真正的答案。</p>
+<p>开源的东西至少能审计，闭源的你只能信。楼主上 VeraCrypt 吧，不难。</p>
+<p>顺便，有空先把 <span class="cz">编程██</span> 的博客从头翻一遍，比官方文档好懂。博主两年前停更了，文章都还在。</p>
+<p>会打开新世界的。</p>`,sig:'<span class="mono">Trust the math, not the vendor.</span>'},
+{u:'pass',era:0,t:'2023-03-14 23:52',ip:'山东',b:`<p>Kali 玩得好，牢饭吃到饱（狗头）</p>`},
+{u:'fish',era:0,t:'2023-03-14 23:55',ip:'湖北',b:`<p>楼上串台了。Kali 是开别人的锁，VeraCrypt 是锁自己的门。</p>`},
+{u:'cat',era:0,t:'2023-03-15 00:03',ip:'加拿大',b:`<p>那也送一句：VeraCrypt 用得好，密码一忘哭到老。</p><p>楼主真要用的话，<b>记得备份卷头</b>。</p>`},
+{u:'op',era:0,t:'2023-03-15 21:30',ip:'广东',b:`
+<p>装好了！比想象中简单。建了个 20G 的加密容器，客户资料全挪进去了，用的时候输一下密码就行。</p>
+<p>谢谢大家～这个帖子就到这吧，结贴 🎉</p>`},
+{u:'night',era:0,t:'2023-03-22 23:14',ip:'河南',b:`<p>@十三号密钥 你清单上那位，<span class="cz">██随想</span>，判了。</p><p>七年。</p>`},
+
+{pg:'第 2 页 · 三个月后',era:1},
+{u:'op',era:1,t:'2023-06-11 01:12',ip:'日本',b:`
+<p>挖个坟。</p>
+<p>最近在一篇篇翻 <span class="cz">██随想</span> 的旧博客，看到了「隐藏卷」和「可否认加密」：一个加密盘里面再藏一个盘，别人证明不了它存在。好酷。</p>
+<p>想问下，普通人有必要用吗？</p>`},
+{u:'cat',era:1,t:'2023-06-11 09:14',ip:'加拿大',b:`<p>没必要。隐藏卷是给那种<b>可能被人逼着交出密码</b>的人设计的。</p><p>谁会逼你？</p>`},
+{u:'op',era:1,t:'2023-06-11 09:30',ip:'日本',b:`<p>也没谁……就是知道了以后，就很想试试。</p>`},
+{u:'key',era:1,t:'2023-06-11 12:02',ip:'美国',b:`<p>有必要。威胁模型是会变的，今天没人逼你，不代表明天没有。</p><p>另外楼主可以开始看看 Tor 和 Tails 了。</p>`,sig:'<span class="mono">Trust the math, not the vendor.</span>'},
+{u:'mira',era:1,t:'2023-06-12 20:45',ip:'新加坡',b:`<p>跟楼主差不多的路线 +1。我现在手机、电脑、NAS 全上了加密，男朋友说我魔怔了 hhh</p>`},
+{u:'man',era:1,t:'2023-06-13 23:10',ip:'江苏',b:`<p>潜水好久，被这个帖子种草了。昨天把聊天记录都导出来加密存档了，感觉安心多了～</p>`},
+{u:'op',era:1,t:'2023-08-20 03:47',ip:'日本',b:`
+<p>更新一下近况：</p>
+<ul><li>VeraCrypt 隐藏卷 ✓</li><li>Tor ✓</li><li>Signal ✓</li><li>微信……在考虑</li></ul>
+<p>感觉打开了新世界。原来网上有这么多人在<b>认真地</b>讨论这些事。</p>`},
+{u:'cat',era:1,t:'2023-08-20 11:02',ip:'加拿大',b:`
+<p><b>写给这个帖子里的新人们</b></p>
+<p>帖子越来越热闹了，作为版主说几句。我在这个论坛十几年，看过很多人走同一条路，大概是四步：</p>
+<p><b>一、找工具。</b>你只是想锁个文件，搜到一个教程。教程本身没问题，但教程底下的评论、推荐阅读、相关链接，全都指向更深的地方。</p>
+<p><b>二、进圈子。</b>你开始泡论坛、看清单。圈子有自己的话，也有自己的默认前提，最大的一条是：<i>你要防的不只是小偷，是政府、公司，和所有不加密的人。</i>这句话不一定错。但你一旦接受了它，后面的每个选择都在它的框里。</p>
+<p><b>三、变成身份。</b>某天你发现，「注重隐私」不再是你做的一件事，而是你是谁。你开始给新人答疑，开始评判别人的安全习惯。到这一步，退出就不只是卸一个软件了，是放弃一部分自己。</p>
+<p><b>四、分岔。</b>身份定了以后，外面发生的事会把不同的人推到不同的地方。同一批人里，我见过后来进大厂做安全的，见过出国的，也见过再也没上线的。</p>
+<p>我不是劝你们别学。<b>我是希望你们知道，自己走在哪条路上。</b></p>`,sig:'BitLocker 不丢人。'},
+{u:'key',era:1,t:'2023-08-20 11:40',ip:'美国',b:`<p>版主这是在劝退？知识不应该有门槛。</p>`},
+{u:'night',era:1,t:'2023-08-20 22:17',ip:'日本',b:`<p>第三步太真实了。我现在跟同事聊天，会下意识地想「这句话会不会被记下来」。</p>`},
+{u:'man',era:1,t:'2023-08-21 00:37',ip:'美国',b:`<p>弱弱问一句……那个博客的博主那么小心，最后不还是被抓了吗？</p><p>那我们学这些，有什么用？</p>`},
+{u:'key',era:1,t:'2023-08-21 01:58',ip:'美国',b:`<p>他最后一篇博文，是一份书单。</p>`,sig:'<span class="mono">Trust the math, not the vendor.</span>'},
+{u:'op',era:1,t:'2023-08-21 02:16',ip:'日本',b:`<p>我好像卡在第二步和第三步之间。</p>`},
+
+{pg:'第 3 页 · 2024 年',era:2},
+{u:'op',era:2,uo:{n:'zs_0x7e',note:'曾用名：今天也要早睡',av:'◐',ab:'#b9b0d2',g:'中级会员',posts:'187'},t:'2024-01-09 04:12',ip:'荷兰',b:`
+<p>改了个名。旧 ID 和我的真名、手机号关联太多了。</p>
+<p>现在上论坛都走 Tor，所以 IP 属地显示的是出口节点的国家，不用在意。</p>`,sig:'<span class="mono">PGP 7E3A 91C0 ···· 4F2D B8E1</span>'},
+{u:'calm',era:2,t:'2024-01-09 10:31',ip:'马来西亚',b:`<p>楼主不觉得有点过了吗？工具是中性的，你拿它锁客户资料就行了，为什么要搞得跟在逃一样？</p>`},
+{u:'op',era:2,uo:{n:'zs_0x7e',note:'曾用名：今天也要早睡',av:'◐',ab:'#b9b0d2',g:'中级会员',posts:'187'},t:'2024-01-09 13:55',ip:'荷兰',b:`<p>……我也说不清。</p><p>就是一旦知道了，就没法假装不知道。</p>`,sig:'<span class="mono">PGP 7E3A 91C0 ···· 4F2D B8E1</span>'},
+{u:'cat',era:2,t:'2024-01-09 21:08',ip:'加拿大',b:`
+<p>@理性讨论 「工具是中性的」，这话没错，但没用。</p>
+<p>菜刀也是中性的，但菜刀不会把你拉进一个群，VeraCrypt 会。我说的从来不是工具能干什么，而是工具<b>连着</b>什么：社区、清单、一整套看世界的方式。</p>
+<p>你可能还想说，大多数人什么事也没有。对，大多数抽大麻的人也没去碰更硬的东西。这条路不是说所有人都会走到底，而是说<b>路就在那儿，站在入口的人看不见尽头</b>。</p>
+<p>还有一点很少有人提：楼主当初完全可以用 BitLocker，他选了 VeraCrypt。<b>选这个工具这件事本身，就已经不中立了。</b>它说明你心里对「谁是对手、多少保护才够、谁值得信」，已经有了一套跟普通人不一样的答案。</p>
+<p>这不是批评，是描述。</p>`,sig:'BitLocker 不丢人。'},
+{u:'tob',era:2,t:'2024-01-10 08:44',ip:'德国',b:`
+<p>外国网友路过。同样一条路，在不同国家通向不同的地方：</p>
+<ul>
+<li>英国：法官可以签令让你交出密钥，<b>拒交本身就是罪</b>。</li>
+<li>美国：没有专门的法律，靠第五修正案，结果看你遇到哪个法院。脑子里的密码比指纹受保护。</li>
+<li>德国（我这里）：没有强制交钥。而且欧盟有 GDPR，很多人的隐私焦虑被法律接住了，不用全压在自己身上。</li>
+<li>你们那边……我就不说了。</li>
+</ul>
+<p>我的感觉是：<b>gateway 最强的地方，往往就是制度最不保护隐私的地方。</b></p>`,tr:'德语',o:`
+<p>Ausländer hier, nur auf der Durchreise. Derselbe Weg führt in verschiedenen Ländern an ganz verschiedene Orte:</p>
+<ul>
+<li>UK: Ein Richter kann anordnen, dass du deinen Schlüssel herausgibst – <b>schon die Weigerung ist eine Straftat</b>.</li>
+<li>USA: Kein eigenes Gesetz, nur der Fünfte Zusatzartikel. Was dabei herauskommt, hängt davon ab, an welches Gericht du gerätst. Ein Passwort im Kopf ist besser geschützt als ein Fingerabdruck.</li>
+<li>Deutschland (hier bei mir): Keine Pflicht zur Schlüsselherausgabe. Und mit der DSGVO fängt das Gesetz einen Teil der Angst um die Privatsphäre auf – man muss nicht alles allein tragen.</li>
+<li>Bei euch … sage ich lieber nichts.</li>
+</ul>
+<p>Mein Eindruck: <b>Der Gateway-Effekt ist dort am stärksten, wo das System die Privatsphäre am wenigsten schützt.</b></p>`},
+{u:'night',era:2,t:'2024-01-10 23:59',ip:'日本',b:`<p>楼上最后一句，收藏了。</p>`},
+{u:'look',era:2,t:'2024-03-02 01:26',ip:'美国',b:`<p>萌新问一下，Tor 除了保护隐私还能干嘛？听说里面有市场？</p>`},
+{u:'cat',era:2,t:'2024-03-02 08:15',ip:'加拿大',b:`<p>别。</p>`},
+{u:'look',era:2,t:'2024-03-02 13:40',ip:'美国',shield:true},
+{u:'fish',era:2,uo:{av:'💼',ab:'#cfe0f0',g:'中级会员',posts:'412'},t:'2024-07-02 22:30',ip:'新加坡',b:`
+<p>冒个泡。毕业了，入职某大厂甲方安全。</p>
+<p>现在每天的工作是给员工电脑装终端管控和 DLP，防止有人把公司资料带走。当年在这个帖子里推荐 VeraCrypt 的人，现在的 KPI 是抓员工偷偷用 VeraCrypt。</p>
+<p>挺好笑的。</p>`},
+{u:'op',era:2,uo:{n:'zs_0x7e',note:'曾用名：今天也要早睡',av:'◐',ab:'#b9b0d2',g:'中级会员',posts:'203'},t:'2024-07-03 03:02',ip:'荷兰',b:`<p>你变了。</p>`},
+{u:'fish',era:2,uo:{av:'💼',ab:'#cfe0f0',g:'中级会员',posts:'412'},t:'2024-07-03 09:11',ip:'新加坡',b:`<p>没变，只是换了个工位。</p><p>……也可能变了吧，不知道。</p>`},
+{u:'water',era:2,t:'2024-08-17 15:20',ip:'美国',b:`
+<p>新人报到～认真看完了整个帖子，大家都好厉害！</p>
+<p>楼主的配置我研究了一下，挺好的，就是 Tor 那块可以照我这个思路调一下，用起来会顺手很多。</p>
+<p>新来的朋友有问题都可以私信我，知无不言 😊</p>`},
+{u:'mira',era:2,uo:{av:'🌴',ab:'#c9efd9'},t:'2024-10-28 16:05',ip:'泰国',b:`
+<p>好久不见！我辞职了。</p>
+<p>现在在清迈远程接活，收稳定币，三个月换一个城市。加密这一套东西一路陪我走到了这里。</p>
+<p>说实话，我挺快乐的。</p>`},
+{u:'night',era:2,t:'2024-12-13 23:50',ip:'日本',b:`<p><span class="cz">██随想</span>，二审维持原判。</p><p>开庭七分钟。</p>`},
+
+{pg:'第 4 页 · 2025 年',era:3},
+{u:'foil',era:3,t:'2025-02-14 02:51',ip:'冰岛',b:`
+<p>有没有人觉得自己家的智能音箱不太对劲？</p>
+<p>我把它扔了。路由器也刷成了自己编译的固件。</p>
+<p>最近总觉得楼下那辆白色面包车，停得不太对。</p>`},
+{u:'qb',era:3,t:'2025-02-14 06:18',ip:'美国',b:`<p>我也是。2019 年就把智能音箱扔了。</p><p>到现在我也说不清，那算偏执，还是只是基本的卫生习惯。</p>`,tr:'英语',o:`<p>Same here. Threw my smart speaker out back in 2019.</p><p>Still can't tell if that was paranoia or just basic hygiene.</p>`},
+{u:'cat',era:3,t:'2025-02-14 09:30',ip:'加拿大',b:`<p>@铝箔帽 兄弟，休息一下。安全不是越多越好的。</p>`,sig:'BitLocker 不丢人。'},
+{u:'foil',era:3,t:'2025-02-14 09:31',ip:'冰岛',b:`<p>版主为什么突然关心我？</p>`},
+{del:true,era:3,f:39},
+{u:'op',era:3,uo:{n:'zs_0x7e',note:'曾用名：今天也要早睡',av:'▪',ab:'#2a2238',g:'中级会员',posts:'261'},t:'2025-03-08 04:40',ip:'未知',b:`
+<p>楼上那条被删的回复，删之前我看到了。</p>
+<p>@白开水 你给新人推荐的那个配置，那个细节，是故意的吗？</p>`,sig:'<span class="mono">PGP 7E3A 91C0 ···· 4F2D B8E1</span>'},
+{u:'water',era:3,t:'2025-03-08 10:02',ip:'美国',b:`<p>楼主多虑啦，那是个笔误，早就改了～</p><p>大家继续交流哦 😊</p>`},
+{u:'man',era:3,t:'2025-05-19 23:48',ip:'江苏',b:`
+<p>我不玩了。</p>
+<p>微信装回来了，密码存在浏览器里。每天都在想「这个安不安全」，太累了。</p>
+<p>祝大家都好。</p>`},
+{u:'night',era:3,uo:{g:'状态异常',gc:'warn'},t:'2025-06-03 00:00',ip:'——',b:`
+<p>我要去做一件事，可能会有一段时间不上线。</p>
+<p>谢谢这个帖子里的每一个人。包括版主。</p>`},
+{u:'op',era:3,uo:{n:'zs_0x7e',note:'曾用名：今天也要早睡',av:'▪',ab:'#2a2238',g:'中级会员',posts:'270'},t:'2025-09-11 03:33',ip:'未知',b:`<p>长夜三个月没上线了。</p><p>有人知道他怎么样了吗。</p>`},
+{sys:'长夜 的个人空间已无法访问',era:3},
+
+{pg:'第 5 页 · 2026 年',era:4},
+{u:'foil',era:4,uo:{av:'',ab:'#1a1a1a'},t:'2026-01-07 05:12',ip:'——',b:`
+<p class="shield" style="margin-bottom:12px">[ 本楼为图片：一封手写信的扫描件 ]</p>
+<p class="hand">他们知道了。他们知道了。他们知道了。<br>他们知道了。他们知道了。他们知道了。</p>`},
+{u:'mira',era:4,uo:{av:'🌴',ab:'#1d3a2c'},t:'2026-02-20 19:26',ip:'越南',b:`<p>小满最近还好吗？好久没看到她了。</p>`},
+{u:'op',era:4,uo:{n:'zs_0x7e',note:'最后登录：2026-03-03',av:'',ab:'#000',g:'中级会员',posts:'281'},t:'2026-03-03 03:41',ip:'荷兰',b:`
+<p>三年前我发这个帖子，只是怕笔记本在地铁上被偷。</p>
+<p>现在我用 Tails，不用微信，手机平时放在屏蔽袋里，IP 属地显示荷兰。客户还是那些客户，资料还是那些资料。我不觉得我做错了什么，也不知道还回不回得去。</p>
+<p>老猫说的四步，我在第四步的路口站了很久。往哪边走都有人走过，往哪边走都有人再也没回来。</p>
+<p>有一个人，走在所有人前面。</p>
+<p class="named">编 程 随 想。阮 晓 寰。</p>
+<p>（中间的空格，是他教的。）</p>
+<p>这个帖子我想留着，给以后搜到这里的人。</p>
+<p><b>你们来的时候，只是想保护文件。我也是。</b></p>`},
+{u:'water',era:4,t:'2026-03-04 10:00',ip:'北京',b:`<p>楼主写得真好～</p><p>新来的朋友，有问题随时私信我哦 😊</p>`},
+{u:'cat',era:4,t:'2026-11-16 04:58',ip:'加拿大',b:`<p>这个帖子我锁了。</p><p>不是因为它有问题，是因为它太好用了。</p>`,sig:'BitLocker 不丢人。'},
+{lock:true,era:4}
+];
+
+/* ======================= RENDER ======================= */
+const floorName = n => n===1?'楼主':n===2?'沙发':n===3?'板凳':n===4?'地板':n+'#';
+let floor = 0, html = '';
+for (const p of T){
+  if (p.pg){ html += `<div class="pager era-${p.era||0}"><span>${p.pg}</span></div>`; continue; }
+  if (p.sys){ html += `<div class="sysline era-${p.era}"><span>${p.sys}</span></div>`; continue; }
+  if (p.lock){ html += `<div class="card era-${p.era} lock">🔒 本帖已被版主 老猫 锁定，禁止回复</div>`; continue; }
+  floor++;
+  if (p.del){ html += `<div class="card era-${p.era} deleted">第 ${floor} 楼 · 该回复已被删除</div>`; continue; }
+  const u = Object.assign({}, U[p.u], p.uo||{});
+  const isOP = p.u==='op';
+  const av = u.av===''? '' : u.av;
+  const body = p.shield ? `<div class="shield">提示：作者被禁止或删除，内容自动屏蔽</div>` : p.b;
+  html += `
+<article class="card post era-${p.era}">
+  <aside class="up">
+    <div class="av" style="background:${u.ab}${u.av===''?';border:1px dashed #555':''}">${av}</div>
+    <div><div class="un">${u.n}</div>${u.note?`<div class="unote">${u.note}</div>`:''}
+    <div class="ug ${u.gc||''}">${u.g}</div>
+    <div class="us">帖子 ${u.posts}<br>注册 ${u.j}</div></div>
+  </aside>
+  <div class="pm">
+    <div class="meta">${isOP?'<span class="optag">楼主</span>':''}<span>发表于 ${p.t}</span><span>IP属地：${p.ip}</span><span class="fl">${floorName(floor)}</span></div>
+    <div class="pb">${body}</div>
+    ${p.tr?`<div class="pb pbo" hidden>${p.o}</div><div class="trn">🌐 由${p.tr}自动翻译 · <span class="tro">查看原文</span></div>`:''}
+    ${(p.sig||u.sig)?`<div class="sig">${p.sig||u.sig}</div>`:''}
+  </div>
+</article>`;
+}
+html += `
+<section class="card era-4 newest">
+  <div class="nh">软件求助 · 最新主题</div>
+  <div class="row me"><span class="t">【求助】笔记本怕被偷，有没有靠谱的加密软件推荐？</span><span class="m">作者：<span class="you">你</span> · 刚刚 · 回复 0 · 查看 1</span></div>
+  <div class="typing">白开水 正在输入<i></i><i></i><i></i></div>
+</section>`;
+document.getElementById('thread').innerHTML = html;
+
+/* ======================= SCROLL-DRIVEN AMBIENCE ======================= */
+const R = document.documentElement;
+const pageStops = [[0,[233,237,242]],[.30,[222,223,230]],[.47,[96,88,112]],[.60,[28,21,36]],[1,[6,3,10]]];
+const headStops = [[0,[47,93,138]],[.30,[52,72,112]],[.50,[40,26,62]],[.72,[18,9,30]],[1,[10,3,16]]];
+const clamp = (x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+function at(stops,p){
+  for(let i=0;i<stops.length-1;i++){
+    const [p0,c0]=stops[i],[p1,c1]=stops[i+1];
+    if(p<=p1){const t=clamp((p-p0)/(p1-p0));return `rgb(${c0.map((v,k)=>Math.round(v+(c1[k]-v)*t)).join(',')})`;}
+  }
+  return `rgb(${stops[stops.length-1][1].join(',')})`;
+}
+const ramp=(p,a,b)=>clamp((p-a)/(b-a));
+
+const online = document.getElementById('online'), login = document.getElementById('login'), logo = document.getElementById('logo');
+let P = 0;
+function update(){
+  const max = document.documentElement.scrollHeight - innerHeight;
+  P = max>0 ? clamp(scrollY/max) : 0;
+  R.style.setProperty('--page', at(pageStops,P));
+  R.style.setProperty('--head', at(headStops,P));
+  R.style.setProperty('--blob', (ramp(P,.5,1)*.32).toFixed(3));
+  R.style.setProperty('--scan', (ramp(P,.62,1)*.07).toFixed(3));
+  R.style.setProperty('--noise', (ramp(P,.7,1)*.06).toFixed(3));
+  R.style.setProperty('--vig', (ramp(P,.4,1)*.55).toFixed(3));
+  online.textContent = P<.5 ? '当前在线 1,204 人' : P<.8 ? '当前在线 37 人' : P<.96 ? '当前在线 2 人' : '当前在线 2 人（你，白开水）';
+  login.textContent  = P<.6 ? '登录 · 注册' : P<.9 ? '游客' : '欢迎回来';
+  revealCracks();
+}
+
+/* ---------- cracks ---------- */
+const svg = document.getElementById('cracks');
+let cracks = [], revealed = new Set();
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}}
+function buildCracks(){
+  const r = rng(20261116);
+  const W = document.documentElement.clientWidth, H = document.documentElement.scrollHeight;
+  const wr = document.getElementById('wrap').getBoundingClientRect();
+  const L = wr.left + 18, Rt = wr.right - 18;
+  svg.setAttribute('width',W); svg.setAttribute('height',H);
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  const N = W<720 ? 16 : 30;
+  let out = ''; cracks = [];
+  for(let i=0;i<N;i++){
+    const y0 = H*(.30 + .68*Math.sqrt(r()));
+    const left = r()<.5;
+    // start at the card edge, run outward into the margin (and a little onto the card frame late on)
+    let x = left ? L + (r()*24 - (y0>H*.78?18:0)) : Rt - (r()*24 - (y0>H*.78?18:0));
+    let y = y0, ang = left ? Math.PI + (r()-.5)*1.1 : (r()-.5)*1.1;
+    const segs = 6 + Math.floor(r()*9);
+    let d = `M${x.toFixed(1)} ${y.toFixed(1)}`, branches = '';
+    for(let s=0;s<segs;s++){
+      const len = 14 + r()*42;
+      ang += (r()-.5)*0.9;
+      x += Math.cos(ang)*len; y += Math.sin(ang)*len*.8;
+      d += ` L${x.toFixed(1)} ${y.toFixed(1)}`;
+      if(r()<.28){
+        let bx=x,by=y,ba=ang+(r()<.5?1:-1)*(.6+r()*.7),bd=`M${bx.toFixed(1)} ${by.toFixed(1)}`;
+        const bs=2+Math.floor(r()*3);
+        for(let k=0;k<bs;k++){const bl=8+r()*22;ba+=(r()-.5)*.8;bx+=Math.cos(ba)*bl;by+=Math.sin(ba)*bl*.8;bd+=` L${bx.toFixed(1)} ${by.toFixed(1)}`;}
+        branches += `<path class="s" pathLength="1" d="${bd}"/><path class="h" pathLength="1" d="${bd}" transform="translate(.9 .9)"/>`;
+      }
+    }
+    cracks.push(y0);
+    out += `<g data-i="${i}" class="${revealed.has(i)?'on':''}"><path class="s" pathLength="1" d="${d}"/><path class="h" pathLength="1" d="${d}" transform="translate(.9 .9)"/>${branches}</g>`;
+  }
+  svg.innerHTML = out;
+}
+function revealCracks(){
+  if(P<.26) return;
+  const edge = scrollY + innerHeight*.85;
+  cracks.forEach((y,i)=>{
+    if(!revealed.has(i) && y<edge){ revealed.add(i); const g=svg.querySelector(`g[data-i="${i}"]`); if(g) requestAnimationFrame(()=>g.classList.add('on')); }
+  });
+}
+
+/* ---------- flicker around the text, never the text itself ---------- */
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+function flicker(){
+  if(!reduce && P>.45){
+    const pool = [document.getElementById('top'), ...document.querySelectorAll('.up .av, .pager span, .sysline span')];
+    const vis = pool.filter(el=>{const b=el.getBoundingClientRect();return b.bottom>0&&b.top<innerHeight;});
+    const n = 1 + Math.floor(ramp(P,.45,1)*3);
+    for(let i=0;i<n&&vis.length;i++){
+      const el = vis[Math.floor(Math.random()*vis.length)];
+      el.classList.remove('flick'); void el.offsetWidth; el.classList.add('flick');
+    }
+    if(P>.45 && Math.random()<.3){
+      const cz=[...document.querySelectorAll('.cz')].filter(el=>{const b=el.getBoundingClientRect();return b.bottom>0&&b.top<innerHeight;});
+      if(cz.length) reveal(cz[Math.floor(Math.random()*cz.length)],160);
+    }
+    if(P>.8 && Math.random()<.35){
+      logo.firstChild.textContent = Math.random()<.5 ? '小机▓' : '██房';
+      setTimeout(()=>logo.firstChild.textContent='小机房', 120);
+    }
+  }
+  const gap = P>.45 ? 2600 - ramp(P,.45,1)*2000 : 1500;
+  setTimeout(flicker, gap*(.6+Math.random()*.8));
+}
+
+/* ---------- the filtered name ---------- */
+function reveal(el,ms){
+  if(el._t) clearTimeout(el._t);
+  if(!el.dataset.mask) el.dataset.mask = el.textContent;
+  el.textContent='编程随想'; el.classList.add('real');
+  el._t=setTimeout(()=>{el.textContent=el.dataset.mask;el.classList.remove('real');},ms);
+}
+document.querySelectorAll('.cz').forEach(el=>el.addEventListener('click',()=>reveal(el,1200)));
+document.querySelectorAll('.tro').forEach(el=>el.addEventListener('click',()=>{
+  const pm=el.closest('.pm'), t=pm.querySelector('.pb:not(.pbo)'), o=pm.querySelector('.pbo');
+  const showO=o.hidden; o.hidden=!showO; t.hidden=showO; el.textContent=showO?'查看译文':'查看原文';
+}));
+
+let tick=false;
+addEventListener('scroll',()=>{if(!tick){tick=true;requestAnimationFrame(()=>{update();tick=false;});}},{passive:true});
+let rz; addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{buildCracks();update();},200);});
+buildCracks(); update(); flicker();
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>{buildCracks();update();});
+})();
+</script>
+</body>
+</html>

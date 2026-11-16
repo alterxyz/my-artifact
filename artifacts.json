@@ -20,5 +20,16 @@
     "file": "artifacts/violent-demographic-clearing/index.html",
     "cover": "artifacts/violent-demographic-clearing/cover.webp",
     "cover_alt": "旧账本上的纸片人形与空缺剪影，以档案拼贴表现人口与制度账目的关系。"
+  },
+  {
+    "slug": "laptop-encryption-software",
+    "title": "笔记本怕被偷，有没有靠谱的加密软件推荐？",
+    "description": "一个虚构电脑论坛里的求助帖：从「笔记本怕被偷，想加个密」开始，三年间的回复一路走向更深的地方。页面随滚动渐暗、开裂。",
+    "category": "虚构叙事",
+    "format": "伪论坛帖",
+    "added": "2026-11-16",
+    "file": "artifacts/laptop-encryption-software.html",
+    "cover": "artifacts/laptop-encryption-software/cover.webp",
+    "cover_alt": "一台半开的笔记本电脑，盖子上亮着一把小锁；背后层层叠起的论坛帖子卡片从左侧明亮的蓝灰色渐渐沉入右侧带裂纹的紫黑色。"
   }
 ]
