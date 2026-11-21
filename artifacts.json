@@ -31,5 +31,16 @@
     "file": "artifacts/laptop-encryption-software.html",
     "cover": "artifacts/laptop-encryption-software/cover.webp",
     "cover_alt": "一台半开的笔记本电脑，盖子上亮着一把小锁；背后层层叠起的论坛帖子卡片从左侧明亮的蓝灰色渐渐沉入右侧带裂纹的紫黑色。"
+  },
+  {
+    "slug": "1120math",
+    "title": "到此一游：在两道千禧年难题的门口打卡",
+    "description": "2026 年 11 月 20 日，黎曼猜想与无外力纳维–斯托克斯爆破同一天被宣布证明，都写成了 Lean。第二天我们租了两台云主机逐条去核：检票记录、两台终端的实况回放，背后是一片活的版画海，鱼会躲开你的鼠标。",
+    "category": "现场记录",
+    "format": "实况 · 交互页面",
+    "added": "2026-11-21",
+    "file": "artifacts/1120math/index.html",
+    "cover": "artifacts/1120math/cover.webp",
+    "cover_alt": "晨版的版画海面：鱼群、月水母和一条鳐鱼围着一张写着「到此一游」的毛玻璃卡片，卡片右上角盖着青色的方形印章。"
   }
 ]
