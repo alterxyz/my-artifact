@@ -337,7 +337,7 @@ p{margin:0 0 1rem}
 <section class="wrap" id="tickets">
   <div class="sec-head"><span class="sec-no">01</span><h2>两张票</h2></div>
   <p class="sec-intro">每份证明一张票，票根上四个孔，对应四道检查。过一道，打一个孔。</p>
-  <p class="live"><span class="pulse" aria-hidden="true"></span>实况 · 最后更新 2026-11-21 15:05 UTC · 每过一道检查更新一次</p>
+  <p class="live"><span class="pulse" aria-hidden="true"></span>实况 · 最后更新 2026-11-21 15:12 UTC · 每过一道检查更新一次</p>
   <div class="tickets">
     <article class="ticket">
       <div class="t-main">
@@ -427,7 +427,7 @@ p{margin:0 0 1rem}
   <div class="sec-head"><span class="sec-no">05</span><h2>收据</h2></div>
   <div class="receipt">
     <h3>RH4 · 收据</h3>
-    <div class="row"><span>rh4 · 黎曼猜想</span><span class="lead"></span><span>n2 自定义 · 4 vCPU · 176 GB</span></div><div class="row"><span>ns4 · 纳维–斯托克斯</span><span class="lead"></span><span>n2-standard-8 · 8 vCPU · 32 GB</span></div><div class="row"><span>拆分前的 rh4</span><span class="lead"></span><span>8 vCPU · 256 GB，约 50 分钟</span></div><div class="row"><span>地点</span><span class="lead"></span><span>us-west1-b，俄勒冈</span></div><div class="row"><span>开机</span><span class="lead"></span><span>2026-11-21 12:46 UTC</span></div><div class="row"><span>关机</span><span class="lead"></span><span>进行中</span></div><hr><div class="row total"><span>算力费用（估）</span><span class="lead"></span><span>进行中</span></div>
+    <div class="row"><span>rh4 · 黎曼猜想</span><span class="lead"></span><span>n2 自定义 · 4 vCPU · 176 GB</span></div><div class="row"><span>ns4 · 纳维–斯托克斯</span><span class="lead"></span><span>n2-standard-8 · 8 vCPU · 32 GB</span></div><div class="row"><span>拆分前的 rh4</span><span class="lead"></span><span>8 vCPU · 256 GB，约 50 分钟</span></div><div class="row"><span>地点</span><span class="lead"></span><span>us-west1-b，俄勒冈</span></div><div class="row"><span>开机</span><span class="lead"></span><span>2026-11-21 12:46 UTC</span></div><div class="row"><span>关机</span><span class="lead"></span><span>进行中</span></div><hr><div class="row total"><span>算力费用（估）</span><span class="lead"></span><span>约 $5.7（截至 15:12 UTC）</span></div>
     <p class="tiny">谢谢光临 · 欢迎再来核</p>
   </div>
 </section>
@@ -437,7 +437,7 @@ p{margin:0 0 1rem}
   <div class="sec-head"><span class="sec-no">06</span><h2>算一笔账</h2></div>
 
   <h3 class="sub">我们这边</h3>
-  <p>两台机器按 Google Cloud 的公开价，合计每小时约 <span class="num">2.2</span> 美元。截至最后更新，已经跑了 <span class="num">2.3</span> 小时，约 <span class="num">5.4</span> 美元；全部跑完、关机之后，换成账单上的实数。Google Cloud 给新账号的 300 美元额度，复现这一页上的全部，绰绰有余。核一份千禧年难题的证明，现在是一顿饭钱的事。</p>
+  <p>两台机器按 Google Cloud 的公开价，合计每小时约 <span class="num">2.2</span> 美元。截至最后更新，已经跑了 <span class="num">2.4</span> 小时，约 <span class="num">5.7</span> 美元；全部跑完、关机之后，换成账单上的实数。Google Cloud 给新账号的 300 美元额度，复现这一页上的全部，绰绰有余。核一份千禧年难题的证明，现在是一顿饭钱的事。</p>
 
   <h3 class="sub">他们那边（猜的）</h3>
   <p>没有人公布过数字，下面是按公开信息倒推的量级，只当一个猜想。</p>
@@ -1076,9 +1076,6 @@ void main(){
   document.addEventListener('keydown', e => { if (e.key === 'Escape') open(false); });
   sys.addEventListener('change', () => { if (root.dataset.mode === 'auto') apply('auto'); });
   apply(root.dataset.mode || 'auto');
-  });
-  paint();
-
 })();
 </script>
 <script>
