@@ -13,9 +13,6 @@ Worker or Pages project for each HTML file.
 - `site/`: index template, styles, favicon, and 404 page.
 - `scripts/build.mjs`: validates the manifest and creates the explicit public allowlist in `dist/`.
 - `wrangler.jsonc`: configuration for the whole site, including its existing Worker name and domain.
-- `src/worker.js`: the only server code. It serves `dist/` unchanged and gives a few artifacts a
-  dedicated subdomain (`ALIASES`; each one also needs its own `routes` entry in `wrangler.jsonc`).
-  The subdomain root shows that page; other paths are served from `dist/` as on the main site.
 - `LICENSING.md`, `LICENSE`, `legal/ICLA.md`: AGPL and commercial licensing boundaries.
 
 `dist/` is generated. Do not edit it. Stale generated output is moved into ignored
