@@ -1,11 +1,23 @@
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 
 // Inspect Git path metadata only. Never open local keys or folder records.
 const git = (...args) => execFileSync('git', args, { encoding: 'utf8' });
+// Some local folder-management names are listed as SHA-256 digests, so the
+// names themselves stay out of this public file. A path part is private when
+// its digest, or the digest of the text after its last dot, is in the list.
+const digest = value => createHash('sha256').update(value).digest('hex');
+const privateNames = new Set([
+  '729756f66ad38e60e38b8cd8a9c8988530b0bbf7e3e16d13fa48988d6893b4be',
+  'd5a7662731aa0f2352278eb88189189d7e6210dc79e33d64eef83bd6c7c63237',
+  '12d70c397d6f469e859a526ff21d09ca12c62b1579dab896329befac6561a019',
+  '0f3b371f0ecd8f7efc1dc9493bfee2ed7bc77e3fc4bd77fde40ae7b868c516d3',
+  '6676fdd03f975299d2afbbf73b7c2c613cff6068f90000379cbb76dcd23557a5',
+]);
 const forbidden = name => /^(drop-in|archive)(\/|$)/.test(name) || name.split('/').some(part =>
-  ['regent-consulate', 'office-of-regent-managed-folder', '.regent-of-folders', '.local', 'regent-managed-folder.md'].includes(part)
-  || part.endsWith('.regent-managed-folder') || part.endsWith('.folder-readme'));
+  part === '.local' || part.endsWith('.folder-readme')
+  || privateNames.has(digest(part)) || privateNames.has(digest(part.slice(part.lastIndexOf('.') + 1))));
 const inspect = (paths, label) => {
   const blocked = paths.filter(Boolean).filter(forbidden);
   if (blocked.length) throw new Error(`${label} contains private local paths:\n${blocked.join('\n')}`);

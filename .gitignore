@@ -9,11 +9,6 @@ dist/
 .dev.vars*
 *.log
 .local/
-regent-consulate/
-regent-managed-folder.md
-.regent-of-folders/
-office-of-regent-managed-folder/
-*.regent-managed-folder/
 *.folder-readme
 /drop-in/
 /archive/

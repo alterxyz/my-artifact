@@ -19,8 +19,8 @@ HTML 创建独立的 Worker 或 Pages 项目。链接型条目也可以直接指
 
 ```text
 artifacts.json      作品清单
-drop-in/            私有收件箱，Git ignored，Regent ensure
-archive/            私有留存成品，Git ignored，Regent ensure
+drop-in/            私有收件箱，Git ignored，本地另行备份
+archive/            私有留存成品，Git ignored，本地另行备份
 artifacts/          获准公开的自包含 HTML
 site/               首页模板与样式
 scripts/build.mjs   构建与清单验证
@@ -46,8 +46,8 @@ bun run dev
 - 获准公开的成品直接移到 `artifacts/`；不必先在归档里留副本。
 - 已归档的成品以后要公开时，从 `archive/` 移到 `artifacts/`。
 
-`drop-in/` 和 `archive/` 都不进入 GitHub 或网站。使用 Regent 的本地实例时，
-应将两棵目录显式加入 `ensure_upload`；空目录与子项均需覆盖。
+`drop-in/` 和 `archive/` 都不进入 GitHub 或网站。Git 忽略不等于备份：
+本地的备份规则要显式覆盖这两棵目录，空目录与子项都要包括。
 放入收件箱或完成清理，都不自动表示同意公开。每份成品只保留一个正式文件，
 构建产生的 `dist/` 可随时重建。
 
@@ -94,7 +94,8 @@ push 和 PR 时自动运行相同检查。**GitHub push 不会自动部署到 Cl
 登录过期时用 `bunx wrangler login` 恢复；凭据由 Wrangler 在项目外保存。
 仅上传 `dist/`，忽略历史、依赖、备份和本机管理文件。
 
-Regent 管理目录和本地记录已列入 `.gitignore`。本地 pre-push 检查还会检查
+本地记录（`.local/`）已列入 `.gitignore`；文件夹管理工具自己的目录在每个克隆的
+`.git/info/exclude` 里忽略。本地 pre-push 检查还会检查
 待推送的每个提交，拦截强制加入索引的管理文件及 `local/` 私有历史分支；
 构建检查和 GitHub CI 也会检查 Git 跟踪文件。检查只读路径，不读取私密正文。
 

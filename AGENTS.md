@@ -7,8 +7,8 @@ Worker or Pages project for each HTML file.
 ## Source of truth
 
 - `artifacts.json`: the published collection, titles, stable slugs, and source files or external URLs.
-- `drop-in/`: private, Git-ignored inbox for incoming material; covered by local Regent ensure rules.
-- `archive/`: private, Git-ignored home for cleaned, organized work retained without publication; also ensured.
+- `drop-in/`: private, Git-ignored inbox for incoming material; covered by the local backup rules.
+- `archive/`: private, Git-ignored home for cleaned, organized work retained without publication; also covered by them.
 - `artifacts/`: approved public HTML source; preserve its content and interaction.
 - `site/`: index template, styles, favicon, and 404 page.
 - `scripts/build.mjs`: validates the manifest and creates the explicit public allowlist in `dist/`.
@@ -47,12 +47,12 @@ Worker or Pages project for each HTML file.
 7. When publication is authorized, run `bun run deploy` once for the whole site.
    Verify the deployed page and commit/push the matching public source.
 
-The inbox and archive are not Git or website content. Their local Regent board
-must ensure both subtrees; Git ignore is not a backup policy. Board identities,
+The inbox and archive are not Git or website content. The local backup rules
+must cover both subtrees; Git ignore is not a backup policy. Backup identities,
 receipts, and other local storage configuration stay in ignored local metadata.
-If a rule change invalidates an in-flight backup task, use the normal Regent
-task workflow and report the actual state; do not bypass locks or claim backup
-completion from an ensure setting alone.
+If a rule change invalidates an in-flight backup task, use the backup tool's
+normal task workflow and report the actual state; do not bypass locks or claim
+backup completion from a rule setting alone.
 
 The build only accepts local files inside the real `artifacts/` directory and
 rejects links escaping it. Never point the public manifest at the inbox or archive.
@@ -75,6 +75,11 @@ masters; do not use it as a second permanent copy of finished work.
 - Run `bun run setup-hooks` once in a new clone. The pre-push hook checks every
   unpublished commit for private folder paths, even if a file was later removed,
   and blocks `local/` history branches. Do not bypass it with `--no-verify`.
+- The guard in `scripts/check-public-files.mjs` matches some local
+  folder-management names by SHA-256 digest, so the names stay out of this
+  public repository. Sample paths for them are in the Git-ignored
+  `.local/private-path-names.txt`. Ignore rules for those names go into
+  `.git/info/exclude` of each clone, not into `.gitignore`.
 - Preserve existing work and deployment identity. Do not deploy an unrelated
   service or change the blog's domain.
 
